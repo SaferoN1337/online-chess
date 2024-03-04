@@ -1,18 +1,18 @@
-import { CheckMoves, ICoordinates } from "../../types";
+import { CheckMoves, ICoordinates } from "../../../types";
 
-const checkKnightPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
+const kingPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
     const changedSquares: ICoordinates[] = [];
     const { X, Y } = coordinates;
 
     const coordinatesList = [
-        { coordinateX: X - 1, coordinateY: Y - 2 },
-        { coordinateX: X - 2, coordinateY: Y - 1 },
-        { coordinateX: X + 1, coordinateY: Y - 2 },
-        { coordinateX: X + 2, coordinateY: Y - 1 },
-        { coordinateX: X - 2, coordinateY: Y + 1 },
-        { coordinateX: X - 1, coordinateY: Y + 2 },
-        { coordinateX: X + 2, coordinateY: Y + 1 },
-        { coordinateX: X + 1, coordinateY: Y + 2 },
+        { coordinateX: X - 1, coordinateY: Y },
+        { coordinateX: X - 1, coordinateY: Y - 1 },
+        { coordinateX: X, coordinateY: Y - 1 },
+        { coordinateX: X - 1, coordinateY: Y + 1 },
+        { coordinateX: X, coordinateY: Y + 1 },
+        { coordinateX: X + 1, coordinateY: Y + 1 },
+        { coordinateX: X + 1, coordinateY: Y },
+        { coordinateX: X + 1, coordinateY: Y - 1 },
     ]
 
     coordinatesList.forEach(possiblePosition => {
@@ -30,4 +30,4 @@ const checkKnightPossibleMoves: CheckMoves = (activePiece, coordinates, currentP
     return changedSquares;
 }
 
-export default checkKnightPossibleMoves;
+export default kingPossibleMoves;

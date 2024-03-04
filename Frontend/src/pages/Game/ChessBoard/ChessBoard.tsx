@@ -6,7 +6,7 @@ import { renderDefaultPosition, showPiecePossibleMoves } from "../../../redux/sl
 
 export default function ChessBoard() {
     const activePiece = useAppSelector(state=> state.game.activePiece);
-    const activePiecePosition = useAppSelector(state=> state.game.activePiecePosition);
+    // const activePiecePosition = useAppSelector(state=> state.game.activePiecePosition);
     const playerColor = useAppSelector((state)=> state.users.playerColor);
     const currentPosition = [...useAppSelector((state)=> state.game.currentPosition)].reverse();
     const dispatch = useAppDispatch();
@@ -15,8 +15,8 @@ export default function ChessBoard() {
         dispatch(renderDefaultPosition());
     }, [playerColor]);
 
-    console.log(currentPosition);
-    console.log(activePiece, activePiecePosition);
+    // console.log(currentPosition);
+    // console.log(activePiece, activePiecePosition);
 
     useEffect(()=> {
         if(activePiece) {
@@ -24,9 +24,8 @@ export default function ChessBoard() {
         }
     }, [activePiece]);
 
-
     return (
-        <div className={`${styles.chessBoard} ${playerColor === "white" ? styles.rotate : ""}`}>
+        <div className={`${styles.chessBoard} ${playerColor === "black" ? styles.rotate : ""}`}>
             {currentPosition.map((squaresList, rowIndex) => squaresList.map((square, columnIndex) => {
                 if (rowIndex % 2 === 0) {
                     if (rowIndex % 2 === 0 && columnIndex % 2 === 0) {

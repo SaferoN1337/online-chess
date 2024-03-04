@@ -5,7 +5,7 @@ interface UsersInitialState {
 }
 
 const initialState: UsersInitialState = {
-    playerColor: "black"
+    playerColor: "white"
 }
 
 export const usersSlice = createSlice({

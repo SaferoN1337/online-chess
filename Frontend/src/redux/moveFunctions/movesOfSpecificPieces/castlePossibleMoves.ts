@@ -1,6 +1,6 @@
-import { CheckMoves, ICoordinates } from "../../types";
+import { CheckMoves, ICoordinates } from "../../../types";
 
-const checkCastlePossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
+const castlePossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
     const changedSquares: ICoordinates[] = [];
     const { X, Y } = coordinates;
 
@@ -75,4 +75,4 @@ const checkCastlePossibleMoves: CheckMoves = (activePiece, coordinates, currentP
     return changedSquares;
 }
 
-export default checkCastlePossibleMoves;
+export default castlePossibleMoves;

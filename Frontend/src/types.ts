@@ -1,6 +1,6 @@
 export interface ISquare {
     possibleMove: boolean,
-    blocked: boolean,
+    attacked: boolean,
     coordinateX: number,
     coordinateY: number,
     piece: null | IPiece
@@ -8,7 +8,6 @@ export interface ISquare {
 
 export interface IPiece {
     color: "black" | "white",
-    url: string,
     type: "king" | "queen" | "castle" | "bishop" | "knight" | "pawn",
 }
 
@@ -17,4 +16,8 @@ export interface ICoordinates {
     Y: number
 }
 
-export type CheckMoves = (activePiece: IPiece, coordinates: ICoordinates, currentPosition: ISquare[][])=> ICoordinates[]
+export type CheckMoves = (
+    activePiece: IPiece,
+    coordinates: ICoordinates,
+    currentPosition: ISquare[][]
+) => ICoordinates[]

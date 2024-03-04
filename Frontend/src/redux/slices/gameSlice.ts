@@ -1,10 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ICoordinates, IPiece, ISquare } from "../../types";
-import checkPawnPossibleMoves from "../checkPossibleMoves/checkPawnPossibleMoves";
-import checkKnightPossibleMoves from "../checkPossibleMoves/checkKnightPossibleMoves";
-import checkBishopPossibleMoves from "../checkPossibleMoves/checkBishopPossibleMoves";
-import checkCastlePossibleMoves from "../checkPossibleMoves/checkCastlePossibleMoves";
-import checkKingPossibleMoves from "../checkPossibleMoves/checkKingPossibleMoves";
+import removeImpossibleMoves from "../moveFunctions/removeImpossibleMoves";
+import allMovesOfThePiece from "../moveFunctions/allMovesOfThePiece";
+import doesOpponentHaveAnyMove from "../moveFunctions/doesOpponentHaveAnyMove";
 
 interface GameInitialState {
     currentPosition: ISquare[][],
@@ -28,20 +26,19 @@ export const gameSlice = createSlice({
         renderDefaultPosition: (state) => {
             const emptyArrays: ISquare[][] = new Array(8).fill(new Array(8).fill(undefined));
 
-            state.currentPosition = emptyArrays.map((squaresList, rowIndex) => {
+            state.currentPosition = emptyArrays.map((squaresList, lineIndex) => {
                 return squaresList.map((_, columnIndex) => {
                     const defaultData: ISquare = {
                         possibleMove: false,
-                        blocked: false,
+                        attacked: false,
                         coordinateX: columnIndex,
-                        coordinateY: rowIndex,
+                        coordinateY: lineIndex,
                         piece: null
                     }
 
                     if (defaultData.coordinateY === 6 || defaultData.coordinateY === 1) {
                         defaultData.piece = {
                             color: defaultData.coordinateY === 6 ? "black" : "white",
-                            url: defaultData.coordinateY === 6 ? "black-pawn.png" : "white-pawn.png",
                             type: "pawn"
                         }
                     } else if (defaultData.coordinateY === 0 || defaultData.coordinateY === 7) {
@@ -60,7 +57,6 @@ export const gameSlice = createSlice({
 
                         defaultData.piece = {
                             color: color,
-                            url: `${color}-${type}.png`,
                             type: type
                         }
                     }
@@ -85,8 +81,8 @@ export const gameSlice = createSlice({
 
         movePiece(state, action: PayloadAction<{ coordinateX: number, coordinateY: number }>) {
             if (!state.activePiece || !state.activePiecePosition) return;
-            const currentPosition = [...state.currentPosition];
-            
+            const currentPosition: ISquare[][] = [...state.currentPosition];
+            const activePiece: IPiece = state.activePiece;
             const startSquare: ISquare = currentPosition[state.activePiecePosition.coordinateY][state.activePiecePosition.coordinateX];
             const endSquare: ISquare = currentPosition[action.payload.coordinateY][action.payload.coordinateX];
 
@@ -96,43 +92,38 @@ export const gameSlice = createSlice({
             currentPosition[action.payload.coordinateY][action.payload.coordinateX] = endSquare;
             currentPosition[state.activePiecePosition.coordinateY][state.activePiecePosition.coordinateX] = startSquare;
 
-            state.currentPosition = currentPosition.map((row) => row.map((square) => {
+            const newPosition = currentPosition.map(line=> line.map((square) => {
                 return { ...square, possibleMove: false }
             }));
 
+            state.currentPosition = newPosition;
             state.activePiece = null;
             state.activePiecePosition = null;
+
+            console.time("findPossibleMoves")
+            const { result, text } = doesOpponentHaveAnyMove(newPosition, activePiece.color === "white" ? "black" : "white");
+            if (result === false && text) {
+                setTimeout(() => {alert(`Игра завршена ${text} GG`)}, 100);
+            }
+            console.timeEnd("findPossibleMoves")
         },
 
         showPiecePossibleMoves(state) {
+            console.time("123")
             if (!state.activePiece || !state.activePiecePosition) return;
-            let changedSquares: ICoordinates[] = [];
-            const currentPosition = [...state.currentPosition].map((row) => row.map((square) => {
+            let listOfMoves: ICoordinates[] = [];
+            const currentPosition = [...state.currentPosition].map((line) => line.map((square) => {
                 return { ...square, possibleMove: false }
             }));
 
-            const activePiecePositionCoordinates = { X : state.activePiecePosition.coordinateX, Y : state.activePiecePosition.coordinateY }
-            if(state.activePiece.type === "pawn") {
-                changedSquares = checkPawnPossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition);
-            } else if(state.activePiece.type === "knight") {
-                changedSquares = checkKnightPossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition);
-            } else if(state.activePiece.type === "bishop") {
-                changedSquares = checkBishopPossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition);
-            } else if(state.activePiece.type === "castle") {
-                changedSquares = checkCastlePossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition);
-            } else if(state.activePiece.type === "queen") {
-                changedSquares = [
-                    ...checkBishopPossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition),
-                    ...checkCastlePossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition)
-                ];
-            } else if(state.activePiece.type === "king") {
-                changedSquares = checkKingPossibleMoves(state.activePiece, activePiecePositionCoordinates, currentPosition);
-            }
+            const activePiecePositionCoordinates = { X: state.activePiecePosition.coordinateX, Y: state.activePiecePosition.coordinateY }
+            listOfMoves = allMovesOfThePiece(state.activePiece, activePiecePositionCoordinates, currentPosition);
+            listOfMoves = removeImpossibleMoves(listOfMoves, state.activePiece, activePiecePositionCoordinates, currentPosition);
 
-            changedSquares.forEach(square=> {
+            listOfMoves.forEach(square => {
                 currentPosition[square.Y][square.X].possibleMove = true;
             });
-
+            console.timeEnd("123")
             state.currentPosition = currentPosition;
         }
     }

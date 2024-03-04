@@ -13,7 +13,6 @@ export default function Square({ color, square }: IProps) {
     const dispatch = useAppDispatch();
     const activePiece = useAppSelector(state => state.game.activePiece);
     const activePiecePosition = useAppSelector(state => state.game.activePiecePosition);
-
     // const letters: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
     function move() {
@@ -28,9 +27,9 @@ export default function Square({ color, square }: IProps) {
         <div
             className={`${styles.square} ${color === "white" ? styles.white : styles.black}`}
             onClick={move}
-            style={square.possibleMove && square.piece ? { backgroundColor: "greenyellow" } : {}}
+            style={square.possibleMove && square.piece && !square.attacked ? { backgroundColor: "greenyellow" } : {}}
         >
-            {square.possibleMove && !square.piece ? <div className={styles.greenDot} /> : null}
+            {square.possibleMove && !square.piece && !square.attacked ? <div className={styles.greenDot} /> : null}
             {square.piece ? <Pieces
                 piece={square.piece}
                 coordinateX={square.coordinateX}

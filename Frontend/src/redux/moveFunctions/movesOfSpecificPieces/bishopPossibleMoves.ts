@@ -1,6 +1,6 @@
-import { CheckMoves, ICoordinates } from "../../types";
+import { CheckMoves, ICoordinates } from "../../../types";
 
-const checkBishopPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
+const bishopPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
     const changedSquares: ICoordinates[] = [];
     const { X, Y } = coordinates;
 
@@ -75,4 +75,4 @@ const checkBishopPossibleMoves: CheckMoves = (activePiece, coordinates, currentP
     return changedSquares;
 }
 
-export default checkBishopPossibleMoves;
+export default bishopPossibleMoves;

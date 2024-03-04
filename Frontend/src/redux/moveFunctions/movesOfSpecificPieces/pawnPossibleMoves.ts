@@ -1,6 +1,6 @@
-import { CheckMoves, ICoordinates } from "../../types";
+import { CheckMoves, ICoordinates } from "../../../types";
 
-const checkPawnPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition)=> {
+const pawnPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition)=> {
     const { X, Y } = coordinates;
 
     const direction: number = activePiece.color === "white" ? +1 : -1;
@@ -31,4 +31,4 @@ const checkPawnPossibleMoves: CheckMoves = (activePiece, coordinates, currentPos
     return changedSquares;
 }
 
-export default checkPawnPossibleMoves;
+export default pawnPossibleMoves;

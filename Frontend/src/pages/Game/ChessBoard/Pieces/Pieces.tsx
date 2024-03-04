@@ -23,8 +23,8 @@ export default function Pieces({ piece, coordinateX, coordinateY }: IProps) {
         <>
             {/* {playerColor === piece.color
                 ? */}
-            <div className={`${styles.piece} ${playerColor === "white" ? styles.rotate : ""}`} onMouseDown={setActivePiece} >
-                <img src={"/pieces/" + piece.url} alt={`${piece.color} ${piece.type}`} />
+            <div className={`${styles.piece} ${playerColor === "black" ? styles.rotate : ""}`} onMouseDown={setActivePiece} >
+                <img src={"/pieces/" + `${piece.color}-${piece.type}.png`} alt={`${piece.color} ${piece.type}`} />
             </div>
             {/* :
                 <div className={`${styles.piece} ${playerColor === "white" ? styles.rotate : ""}`}>
