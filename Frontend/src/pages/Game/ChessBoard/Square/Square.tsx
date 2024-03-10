@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
-import { movePiece } from "../../../../redux/slices/gameSlice";
+import { runAnimationAndSaveHistory } from "../../../../redux/slices/gameSlice";
 import { ISquare } from "../../../../types";
 import styles from "../ChessBoard.module.css";
 import Pieces from "../Pieces/Pieces";
@@ -19,7 +19,8 @@ export default function Square({ color, square }: IProps) {
         // console.log(letters[square.coordinateX], square.coordinateY + 1)
         console.log(square.coordinateX, square.coordinateY)
         if (activePiece && activePiecePosition && square.possibleMove) {
-            dispatch(movePiece({ coordinateX: square.coordinateX, coordinateY: square.coordinateY }));
+            // dispatch(movePiece({ coordinateX: square.coordinateX, coordinateY: square.coordinateY }));
+            dispatch(runAnimationAndSaveHistory({ coordinateX: square.coordinateX, coordinateY: square.coordinateY }));
         }
     }
 
@@ -29,7 +30,15 @@ export default function Square({ color, square }: IProps) {
             onClick={move}
             style={square.possibleMove && square.piece && !square.attacked ? { backgroundColor: "greenyellow" } : {}}
         >
-            {square.possibleMove && !square.piece && !square.attacked ? <div className={styles.greenDot} /> : null}
+            {square.possibleMove && !square.piece && !square.attacked
+                ?
+                <div className={styles.greenDot} >
+                    <div/>
+                    {/* <img src="/icons/green-dot.png" alt="green dot" /> */}
+                </div>
+                :
+                null
+            }
             {square.piece ? <Pieces
                 piece={square.piece}
                 coordinateX={square.coordinateX}

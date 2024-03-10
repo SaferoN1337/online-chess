@@ -1,0 +1,45 @@
+.gameHistoryWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.gameHistory {
+    max-width: 360px;
+    width: 100%;
+    height: 200px;
+    overflow-y: auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.moveImg {
+    height: 30px;
+    width: 30px;
+}
+
+.moveInfoWrapper {
+    display: flex;
+    align-items: center;
+    width: 150px;
+    margin-bottom: 5px;
+}
+
+.moveCoordinates {
+    margin: 0 0 0 10px;
+    font-size: 22px;    
+} 
+
+.emptyMove {
+    height: 30px;
+}
+
+.numberOfMoveWrapper div {
+    width: 40px;
+    height: 30px;
+    font-size: 24px;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

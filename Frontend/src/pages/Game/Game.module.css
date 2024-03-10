@@ -1,6 +1,17 @@
-.content {
-    max-width: 800px;
+.chessBoardWrapper {
+    max-width: 700px;
     border: solid black 10px;
     margin: 20px;
+}
+
+.content {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.mainBlock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 

@@ -7,9 +7,13 @@ export interface ISquare {
 }
 
 export interface IPiece {
-    color: "black" | "white",
-    type: "king" | "queen" | "castle" | "bishop" | "knight" | "pawn",
+    color: Colors,
+    type: PieceTypes,
 }
+
+export type PieceTypes = "king" | "queen" | "castle" | "bishop" | "knight" | "pawn"
+
+export type Colors = "black" | "white";
 
 export interface ICoordinates {
     X: number,
@@ -21,3 +25,13 @@ export type CheckMoves = (
     coordinates: ICoordinates,
     currentPosition: ISquare[][]
 ) => ICoordinates[]
+
+export interface gameHistoryMove {
+    id: number,
+    type: PieceTypes,
+    color: Colors,
+    startSquare: ICoordinates,
+    endSquare: ICoordinates,
+    killedPiece: null | IPiece,
+    check: boolean
+}

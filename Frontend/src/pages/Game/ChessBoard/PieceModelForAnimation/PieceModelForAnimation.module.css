@@ -1,0 +1,16 @@
+.pieceImgWrapper {
+    position: absolute;
+    width: 12.5%;
+    height: 12.5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+}
+
+.pieceImgWrapper img {
+    width: 80%;
+    height: 80%;
+    max-width: 80px;
+    max-height: 80px;
+}
