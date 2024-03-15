@@ -1,5 +1,5 @@
 import { useAppSelector } from "../../../redux/hooks/hooks";
-import { gameHistoryMove } from "../../../types";
+import { gameHistoryMove } from "../../../../../types";
 import styles from "./GameHistory.module.css";
 import MoveInfo from "./MoveInfo";
 
@@ -16,7 +16,7 @@ export default function GameHistory() {
         }
     });
 
-    console.log(history)
+    // console.log(history)
     return (
         <div className={styles.gameHistoryWrapper}>
             <div className={styles.gameHistory}>

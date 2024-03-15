@@ -2,50 +2,42 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
 import styles from "./PieceModelForAnimation.module.css";
 import { movePiece } from "../../../../redux/slices/gameSlice";
-import { IPiece } from "../../../../types";
+import { ICoordinates, IPiece } from "../../../../../../types";
 
-export default function PieceModelForAnimation() {
+interface IProps {
+    start: ICoordinates,
+    end: ICoordinates,
+    piece: IPiece
+}
+
+export default function PieceModelForAnimation({ start, end, piece }: IProps) {
     const dispatch = useAppDispatch();
-    const activePiece = useAppSelector(state => state.game.activePiece);
-    const activePiecePosition = useAppSelector(state => state.game.activePiecePosition);
-    const modelCoordinates = useAppSelector(state => state.game.pieceModelCoordinates);
-
-    const [piece, setPiece] = useState<IPiece | null>(null);
-    const [currentCoordinates, setCurrentCoordinates] = useState<{ X: number, Y: number } | null>(null);
-
-    const top: string = currentCoordinates ? `${(7 - currentCoordinates.Y) * 12.5}%` : "";
-    const left: string = currentCoordinates ? `${currentCoordinates.X * 12.5}%` : "";
-    const visibility: "hidden" | "visible" = currentCoordinates?.X === activePiecePosition?.coordinateX && currentCoordinates?.Y === activePiecePosition?.coordinateY ? "hidden" : "visible";
+    const playerColor = useAppSelector(state => state.users.playerColor);
+    const [currentPosition, setCurrentPosition] = useState<ICoordinates>(start);
+    const [visibility, setVisibility] = useState<"hidden" | "visible">("hidden");
     const delay: number = 300;
 
-    if (!modelCoordinates || !activePiece) {
-        return null;
-    }
-
     useEffect(() => {
-        setCurrentCoordinates(modelCoordinates);
-    }, [modelCoordinates]);
-
-    useEffect(() => {
-        if (currentCoordinates !== null && (currentCoordinates?.X !== activePiecePosition?.coordinateX || currentCoordinates?.Y !== activePiecePosition?.coordinateY)) {
+        if (end.X !== start.X || end.Y !== start.Y) {
+            console.time("animation")
+            setCurrentPosition(end);
+            setVisibility("visible");
             setTimeout(() => {
-                dispatch(movePiece({ coordinateX: modelCoordinates.X, coordinateY: modelCoordinates.Y }));
-            }, delay)
+                console.timeEnd("animation")
+                setVisibility("hidden");
+                dispatch(movePiece(end));
+            }, delay);
         }
-    }, [currentCoordinates]);
-
-    useEffect(() => {
-        setPiece(activePiece);
-    }, [activePiece]);
+    }, [end, start]);
 
     return (
         <div
-            className={styles.pieceImgWrapper}
+            className={`${styles.pieceImgWrapper} ${playerColor === "black" ? styles.rotate : ""}`}
             style={{
                 transition: `top ${delay / 1000}s, left ${delay / 1000}s`,
                 visibility: visibility,
-                top: top,
-                left: left
+                top: `${(7 - currentPosition.Y) * 12.5}%`,
+                left: `${currentPosition.X * 12.5}%`
             }}
         >
             <img

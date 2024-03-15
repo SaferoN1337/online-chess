@@ -1,4 +1,4 @@
-import { Colors, IPiece, ISquare, gameHistoryMove } from "../../types";
+import { Colors, IPiece, ISquare, gameHistoryMove } from "../../../../../types";
 import markAllAttackedSquares from "./markAllAttackedSquares";
 
 type Function = (
@@ -11,8 +11,11 @@ type Function = (
 ) => gameHistoryMove[]
 
 const updateGemeHistory: Function = (history, activePiece, startSquare, endSquare, position, killedPiece) => {
-    const currenPosition: ISquare[][] = [...position].map(line => [...line].map(square => { return { ...square } }));
-    const opponentColor: Colors = activePiece.color === "white" ? "black" : "white"; 
+    const currenPosition: ISquare[][] = [...position].map(line => [...line].map(square => { 
+        return { ...square, piece: square.piece ? { ...square.piece } : null } 
+    }));
+    currenPosition[endSquare.Y][endSquare.X].piece = { ...activePiece };
+    const opponentColor: Colors = activePiece.color === "white" ? "black" : "white";
 
     markAllAttackedSquares(currenPosition, opponentColor);
 
@@ -23,8 +26,8 @@ const updateGemeHistory: Function = (history, activePiece, startSquare, endSquar
         id: history.length,
         color: activePiece.color,
         type: activePiece.type,
-        startSquare: { X: startSquare.coordinateX, Y: startSquare.coordinateY },
-        endSquare: { X: endSquare.coordinateX, Y: endSquare.coordinateY },
+        startSquare: { X: startSquare.X, Y: startSquare.Y },
+        endSquare: { X: endSquare.X, Y: endSquare.Y },
         killedPiece: killedPiece,
         check: kingsPosition.attacked
     }];

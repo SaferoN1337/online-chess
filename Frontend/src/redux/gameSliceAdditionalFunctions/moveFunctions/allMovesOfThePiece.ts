@@ -1,4 +1,4 @@
-import { CheckMoves, ICoordinates } from "../../types";
+import { CheckMoves, ICoordinates } from "../../../../../types";
 import bishopPossibleMoves from "./movesOfSpecificPieces/bishopPossibleMoves";
 import castlePossibleMoves from "./movesOfSpecificPieces/castlePossibleMoves";
 import kingPossibleMoves from "./movesOfSpecificPieces/kingPossibleMoves";

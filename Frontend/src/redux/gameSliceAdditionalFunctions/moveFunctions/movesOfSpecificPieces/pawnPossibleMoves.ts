@@ -1,4 +1,4 @@
-import { CheckMoves, ICoordinates } from "../../../types";
+import { CheckMoves, ICoordinates } from "../../../../../../types";
 
 const pawnPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition)=> {
     const { X, Y } = coordinates;
@@ -10,7 +10,7 @@ const pawnPossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition
     if (nextRow[X].piece === null) {
         changedSquares.push({ Y: Y + direction, X });
 
-        if (currentPosition[Y + direction * 2][X].piece === null) {
+        if (Y + direction * 2 <= 7 && Y + direction * 2 >= 0 &&currentPosition[Y + direction * 2][X].piece === null) {
             const isItWhitePawnOnTheStartPosition = activePiece.color === "white" && Y === 1;
             const isItBlackPawnOnTheStartPosition = activePiece.color === "black" && Y === 6;
 

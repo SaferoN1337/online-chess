@@ -40,24 +40,6 @@
     background-color: white;
 }
 
-.piece {
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    max-width: 100px;
-    max-height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.piece img {
-    width: 80%;
-    height: 80%;
-    max-width: 80px;
-    max-height: 80px;
-}
-
 .rotate {
     rotate: 180deg;
 }

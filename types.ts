@@ -1,8 +1,8 @@
 export interface ISquare {
     possibleMove: boolean,
     attacked: boolean,
-    coordinateX: number,
-    coordinateY: number,
+    X: number,
+    Y: number,
     piece: null | IPiece
 }
 
@@ -34,4 +34,11 @@ export interface gameHistoryMove {
     endSquare: ICoordinates,
     killedPiece: null | IPiece,
     check: boolean
+}
+
+export interface MoveData {
+    startSquare: ICoordinates,
+    endSquare: ICoordinates,
+    roomId: number,
+    piece: IPiece
 }

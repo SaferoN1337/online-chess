@@ -1,12 +1,19 @@
-.pieceImgWrapper {
+.promotionBlock {
+    z-index: 100;
     position: absolute;
-    z-index: 10;
-    width: 12.5%;
+    background-color: rgb(236, 236, 198);
+    width: 50%;
     height: 12.5%;
+    display: flex;
+}
+
+.pieceImgWrapper {
+    width: 25%;
+    cursor: pointer;
+    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
-    visibility: hidden;
 }
 
 .pieceImgWrapper img {

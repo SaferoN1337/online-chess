@@ -1,4 +1,4 @@
-import { gameHistoryMove } from "../../../types";
+import { gameHistoryMove } from "../../../../../types";
 import styles from "./GameHistory.module.css";
 
 export default function MoveInfo({ move }: { move: gameHistoryMove }) {

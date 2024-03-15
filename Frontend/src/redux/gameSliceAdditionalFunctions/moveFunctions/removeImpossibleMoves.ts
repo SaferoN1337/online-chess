@@ -1,4 +1,4 @@
-import { ICoordinates, IPiece, ISquare } from "../../types";
+import { ICoordinates, IPiece, ISquare } from "../../../../../types";
 import markAllAttackedSquares from "./markAllAttackedSquares";
 
 type Function = (

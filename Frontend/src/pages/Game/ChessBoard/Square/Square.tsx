@@ -1,6 +1,8 @@
+import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
-import { runAnimationAndSaveHistory } from "../../../../redux/slices/gameSlice";
-import { ISquare } from "../../../../types";
+import { runAnimationAndSaveHistory, showPromotionBlock } from "../../../../redux/slices/gameSlice";
+import { socket } from "../../../../skocketIo";
+import { ISquare, MoveData } from "../../../../../../types";
 import styles from "../ChessBoard.module.css";
 import Pieces from "../Pieces/Pieces";
 
@@ -13,14 +15,27 @@ export default function Square({ color, square }: IProps) {
     const dispatch = useAppDispatch();
     const activePiece = useAppSelector(state => state.game.activePiece);
     const activePiecePosition = useAppSelector(state => state.game.activePiecePosition);
-    // const letters: string[] = ["a", "b", "c", "d", "e", "f", "g", "h"];
-
+    const roomId = useLocation().pathname.replace("/game/", "");
     function move() {
-        // console.log(letters[square.coordinateX], square.coordinateY + 1)
-        console.log(square.coordinateX, square.coordinateY)
+        console.log(square.X, square.Y)
+
         if (activePiece && activePiecePosition && square.possibleMove) {
-            // dispatch(movePiece({ coordinateX: square.coordinateX, coordinateY: square.coordinateY }));
-            dispatch(runAnimationAndSaveHistory({ coordinateX: square.coordinateX, coordinateY: square.coordinateY }));
+            console.log(square.possibleMove)
+            const moveData: MoveData = {
+                startSquare: { X: activePiecePosition.X, Y: activePiecePosition.Y },
+                endSquare: { X: square.X, Y: square.Y },
+                piece: activePiece,
+                roomId: +roomId
+            }
+
+            if(square.Y === 7 && activePiece.type === "pawn" && activePiece.color === "white") {
+                dispatch(showPromotionBlock(moveData));
+            } else if(square.Y=== 0 && activePiece.type === "pawn" && activePiece.color === "black") { 
+                dispatch(showPromotionBlock(moveData));
+            }else {
+                dispatch(runAnimationAndSaveHistory(moveData));
+                socket.emit("movePiece", moveData);
+            }
         }
     }
 
@@ -28,21 +43,20 @@ export default function Square({ color, square }: IProps) {
         <div
             className={`${styles.square} ${color === "white" ? styles.white : styles.black}`}
             onClick={move}
-            style={square.possibleMove && square.piece && !square.attacked ? { backgroundColor: "greenyellow" } : {}}
+            style={square.possibleMove && square.piece && !square.attacked  ? { backgroundColor: "greenyellow" } : {}}
         >
-            {square.possibleMove && !square.piece && !square.attacked
+            {square.possibleMove && !square.piece && !square.attacked 
                 ?
                 <div className={styles.greenDot} >
-                    <div/>
-                    {/* <img src="/icons/green-dot.png" alt="green dot" /> */}
+                    <div />
                 </div>
                 :
                 null
             }
             {square.piece ? <Pieces
                 piece={square.piece}
-                coordinateX={square.coordinateX}
-                coordinateY={square.coordinateY}
+                X={square.X}
+                Y={square.Y}
             /> : null}
         </div>
     )

@@ -1,11 +1,22 @@
+import { useEffect } from "react";
 import { useAppDispatch } from "../../redux/hooks/hooks";
 import { setPlayerColor } from "../../redux/slices/usersSlice";
 import ChessBoard from "./ChessBoard/ChessBoard";
-import styles from "./Game.module.css";
+import styles from "./GamePage.module.css";
 import GameHistory from "./GameHistory/GameHistory";
+import { socket } from "../../skocketIo";
+import { useLocation } from "react-router-dom";
 
-export default function Game() {
+export default function GamePage() {
     const dispatch = useAppDispatch();
+    const location = useLocation();
+
+    useEffect(() => {
+        const roomId = location.pathname.replace("/game/", "");
+        socket.emit("enterTheRoom", { roomId: roomId }, (response: { result: boolean }) => {
+            console.log(`user connected to the room ${roomId} with result ${response.result}`);
+        });
+    }, []);
 
     return (
         <div className={styles.content}>

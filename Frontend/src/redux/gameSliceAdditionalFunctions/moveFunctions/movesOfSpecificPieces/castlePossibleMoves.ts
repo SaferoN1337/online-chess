@@ -1,4 +1,4 @@
-import { CheckMoves, ICoordinates } from "../../../types";
+import { CheckMoves, ICoordinates } from "../../../../../../types";
 
 const castlePossibleMoves: CheckMoves = (activePiece, coordinates, currentPosition) => {
     const changedSquares: ICoordinates[] = [];

@@ -1,4 +1,4 @@
-import { ICoordinates, IPiece, ISquare } from "../../types";
+import { ICoordinates, IPiece, ISquare } from "../../../../../types";
 import allMovesOfThePiece from "./allMovesOfThePiece";
 import markAllAttackedSquares from "./markAllAttackedSquares";
 import removeImpossibleMoves from "./removeImpossibleMoves";
@@ -9,7 +9,7 @@ const doesOpponentHaveAnyMove = (position: ISquare[][], playerColor: "white" | "
 
     for (let i = 0; i < listOfPiece.length; i++) {
         const square: ISquare = listOfPiece[i];
-        const coordinates: ICoordinates = { X: square.coordinateX, Y: square.coordinateY }
+        const coordinates: ICoordinates = { X: square.X, Y: square.Y }
 
         let listOfMoves = allMovesOfThePiece(square.piece as IPiece, coordinates, position);
 
