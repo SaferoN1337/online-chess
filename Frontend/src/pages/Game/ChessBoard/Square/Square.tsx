@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
-import { runAnimationAndSaveHistory, showPromotionBlock } from "../../../../redux/slices/gameSlice";
+import { castling, runCastlingAnimation, runPieceMoveAnimation, showPromotionBlock } from "../../../../redux/slices/gameSlice";
 import { socket } from "../../../../skocketIo";
 import { ISquare, MoveData } from "../../../../../../types";
 import styles from "../ChessBoard.module.css";
@@ -28,12 +28,21 @@ export default function Square({ color, square }: IProps) {
                 roomId: +roomId
             }
 
-            if(square.Y === 7 && activePiece.type === "pawn" && activePiece.color === "white") {
+
+            if (square.Y === 7 && activePiece.type === "pawn" && activePiece.color === "white") {
                 dispatch(showPromotionBlock(moveData));
-            } else if(square.Y=== 0 && activePiece.type === "pawn" && activePiece.color === "black") { 
+            } else if (square.Y === 0 && activePiece.type === "pawn" && activePiece.color === "black") {
                 dispatch(showPromotionBlock(moveData));
-            }else {
-                dispatch(runAnimationAndSaveHistory(moveData));
+            } else if (activePiece.type === "king"
+                && (square.Y === 0 || square.Y === 7)
+                && (square.X === 2 || square.X === 6)
+                && (activePiecePosition.X === 4)
+                && (activePiecePosition.Y === 0 || activePiecePosition.Y === 7)
+            ) {
+                dispatch(runCastlingAnimation(moveData));
+                socket.emit("castling", moveData);
+            } else {
+                dispatch(runPieceMoveAnimation(moveData));
                 socket.emit("movePiece", moveData);
             }
         }
@@ -43,9 +52,9 @@ export default function Square({ color, square }: IProps) {
         <div
             className={`${styles.square} ${color === "white" ? styles.white : styles.black}`}
             onClick={move}
-            style={square.possibleMove && square.piece && !square.attacked  ? { backgroundColor: "greenyellow" } : {}}
+            style={square.possibleMove && square.piece && !square.attacked ? { backgroundColor: "greenyellow" } : {}}
         >
-            {square.possibleMove && !square.piece && !square.attacked 
+            {square.possibleMove && !square.piece && !square.attacked
                 ?
                 <div className={styles.greenDot} >
                     <div />

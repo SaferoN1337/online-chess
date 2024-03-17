@@ -1,22 +1,21 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Colors, ICoordinates, IPiece, ISquare, MoveData, gameHistoryMove } from "../../../../types";
+import { Colors, ICastlingData, ICoordinates, IPiece, ISquare, MoveData, gameHistoryMove } from "../../../../types";
 import removeImpossibleMoves from "../gameSliceAdditionalFunctions/moveFunctions/removeImpossibleMoves";
 import allMovesOfThePiece from "../gameSliceAdditionalFunctions/moveFunctions/allMovesOfThePiece";
 import doesOpponentHaveAnyMove from "../gameSliceAdditionalFunctions/moveFunctions/doesOpponentHaveAnyMove";
 import updateGemeHistory from "../gameSliceAdditionalFunctions/moveFunctions/updateHistory";
 import renderDefaultPosition from "../gameSliceAdditionalFunctions/moveFunctions/renderDefaultPosition";
+import checkCastlingPossibility from "../gameSliceAdditionalFunctions/moveFunctions/movesOfSpecificPieces/castling";
 
 interface GameInitialState {
     currentPosition: ISquare[][],
     activePiece: null | IPiece,
-    activePiecePosition: null | {
-        X: number,
-        Y: number
-    },
+    activePiecePosition: null | ICoordinates,
     gameHistory: gameHistoryMove[],
     moveColor: Colors,
     movePieceModelTo: ICoordinates | null,
-    promotionMove: null | MoveData
+    promotionMove: MoveData | null,
+    castlingData: ICastlingData | null;
 }
 
 const initialState: GameInitialState = {
@@ -26,7 +25,8 @@ const initialState: GameInitialState = {
     gameHistory: [],
     moveColor: "white",
     movePieceModelTo: null,
-    promotionMove: null
+    promotionMove: null,
+    castlingData: null
 }
 
 export const gameSlice = createSlice({
@@ -39,37 +39,33 @@ export const gameSlice = createSlice({
                 state.activePiecePosition = null;
             } else {
                 state.activePiece = action.payload.piece;
-                state.activePiecePosition = {
-                    X: action.payload.X,
-                    Y: action.payload.Y
-                };
+                state.activePiecePosition = { X: action.payload.X, Y: action.payload.Y };
             }
         },
 
-        runAnimationAndSaveHistory(state, action: PayloadAction<MoveData>) {
+        runPieceMoveAnimation(state, action: PayloadAction<MoveData>) {
             const currentPosition: ISquare[][] = [...state.currentPosition];
             const startSquare: ISquare = currentPosition[action.payload.startSquare.Y][action.payload.startSquare.X];
-            const activePiece: IPiece = action.payload.piece;
+            const piece: IPiece = action.payload.piece;
             const endSquare: ISquare = currentPosition[action.payload.endSquare.Y][action.payload.endSquare.X];
             const killedPiece: IPiece | null = endSquare.piece ? { ...endSquare.piece } : null;
 
             startSquare.piece = null;
             state.activePiece = action.payload.piece;
             state.activePiecePosition = action.payload.startSquare;
-            state.moveColor = activePiece.color === "white" ? "black" : "white";
-            state.gameHistory = updateGemeHistory(state.gameHistory, activePiece, startSquare, endSquare, currentPosition, killedPiece);
+            state.moveColor = piece.color === "white" ? "black" : "white";
+            state.gameHistory = updateGemeHistory(state.gameHistory, piece, startSquare, endSquare, currentPosition, killedPiece);
             state.movePieceModelTo = { X: action.payload.endSquare.X, Y: action.payload.endSquare.Y };
             state.currentPosition = currentPosition.map(line => line.map((square) => {
                 return { ...square, possibleMove: false }
             }));
         },
 
-        movePiece(state, action: PayloadAction<{ X: number, Y: number }>) {
+        movePiece(state, action: PayloadAction<ICoordinates>) {
             if (!state.activePiece || !state.activePiecePosition) return;
             const currentPosition: ISquare[][] = [...state.currentPosition];
             const activePiece: IPiece = state.activePiece;
             const endSquare: ISquare = currentPosition[action.payload.Y][action.payload.X];
-
 
             endSquare.piece = activePiece;
             state.currentPosition = currentPosition;
@@ -82,8 +78,58 @@ export const gameSlice = createSlice({
             }
         },
 
+        runCastlingAnimation(state, action: PayloadAction<MoveData>) {
+            const currentPosition = state.currentPosition.map(line => line.map(square => { return { ...square, possibleMove: false } }));
+            const startSquare = currentPosition[action.payload.startSquare.Y][action.payload.startSquare.X];
+            const endSquare = currentPosition[action.payload.endSquare.Y][action.payload.endSquare.X];
+            let castle: IPiece = currentPosition[startSquare.Y][7].piece as IPiece;
+            const king: IPiece = currentPosition[startSquare.Y][startSquare.X].piece as IPiece;
+            if (endSquare.X === 2) {
+                castle = currentPosition[startSquare.Y][0].piece as IPiece;
+            }
+            currentPosition[startSquare.Y][endSquare.X === 2 ? 0 : 7].piece = null;
+            startSquare.piece = null;
+
+            let castlingData: ICastlingData = {
+                castle: castle,
+                castleCorrdinates: {
+                    startSquare: { Y: startSquare.Y, X: endSquare.X === 2 ? 0 : 7 },
+                    endSquare: { Y: startSquare.Y, X: endSquare.X === 2 ? 3 : 5 }
+                },
+                king: king,
+                kingCorrdinates: {
+                    startSquare: { Y: startSquare.Y, X: startSquare.X },
+                    endSquare: { Y: endSquare.Y, X: endSquare.X }
+                }
+            };
+
+            state.gameHistory = updateGemeHistory(state.gameHistory, king, startSquare, endSquare, currentPosition, null);
+            state.moveColor = action.payload.piece.color === "white" ? "black" : "white";
+            state.castlingData = castlingData;
+            state.currentPosition = currentPosition;
+        },
+
+        castling(state) {
+            if (!state.castlingData) return;
+            const currentPosition = state.currentPosition;
+            const castleEndSquare = state.castlingData.castleCorrdinates.endSquare;
+            const kingEndSquare = state.castlingData.kingCorrdinates.endSquare;
+
+            currentPosition[castleEndSquare.Y][castleEndSquare.X].piece = state.castlingData.castle;
+            currentPosition[kingEndSquare.Y][kingEndSquare.X].piece = state.castlingData.king;
+
+            currentPosition.map(line => line.map(square => square.possibleMove = false));
+            const { result, text } = doesOpponentHaveAnyMove(currentPosition, state.castlingData.king.color === "white" ? "black" : "white");
+            if (result === false && text) {
+                setTimeout(() => { alert(`Игра завршена ${text} GG`) }, 100);
+            }
+
+            state.castlingData = null;
+            state.activePiece = null;
+            state.activePiecePosition = null;
+        },
+
         showPiecePossibleMoves(state) {
-            // console.time("123")
             if (!state.activePiece || !state.activePiecePosition) return;
             let listOfMoves: ICoordinates[] = [];
             const currentPosition = [...state.currentPosition].map((line) => line.map((square) => {
@@ -93,11 +139,12 @@ export const gameSlice = createSlice({
             const activePiecePositionCoordinates = { X: state.activePiecePosition.X, Y: state.activePiecePosition.Y }
             listOfMoves = allMovesOfThePiece(state.activePiece, activePiecePositionCoordinates, currentPosition);
             listOfMoves = removeImpossibleMoves(listOfMoves, state.activePiece, activePiecePositionCoordinates, currentPosition);
-
+            if (state.activePiece.type === "king") {
+                listOfMoves = [...listOfMoves, ...checkCastlingPossibility(state.activePiece, activePiecePositionCoordinates, currentPosition, state.gameHistory)]
+            }
             listOfMoves.forEach(square => {
                 currentPosition[square.Y][square.X].possibleMove = true;
             });
-            // console.timeEnd("123")
             state.currentPosition = currentPosition;
         },
 
@@ -110,9 +157,11 @@ export const gameSlice = createSlice({
 export const {
     updateActivePiece,
     movePiece,
+    castling,
     showPiecePossibleMoves,
-    runAnimationAndSaveHistory,
-    showPromotionBlock 
+    runPieceMoveAnimation,
+    runCastlingAnimation,
+    showPromotionBlock
 } = gameSlice.actions
 
 export default gameSlice.reducer

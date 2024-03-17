@@ -23,7 +23,7 @@ export interface ICoordinates {
 export type CheckMoves = (
     activePiece: IPiece,
     coordinates: ICoordinates,
-    currentPosition: ISquare[][]
+    currentPosition: ISquare[][],
 ) => ICoordinates[]
 
 export interface gameHistoryMove {
@@ -41,4 +41,17 @@ export interface MoveData {
     endSquare: ICoordinates,
     roomId: number,
     piece: IPiece
+}
+
+export interface ICastlingData {
+    castle: IPiece,
+    castleCorrdinates: {
+        startSquare: ICoordinates,
+        endSquare: ICoordinates,
+    },
+    king: IPiece,
+    kingCorrdinates: {
+        startSquare: ICoordinates,
+        endSquare: ICoordinates,
+    }
 }

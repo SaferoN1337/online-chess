@@ -31,11 +31,15 @@ io.on('connection', (socket) => {
         socket.join(`room ${roomId}`);
         console.log(`user joined room ${roomId}`);
         callback({ result: true });
-    })
+    });
 
-    socket.on("movePiece", ({ startSquare, endSquare, piece, roomId }: MoveData, callback: SocketIoCallback)=> {
-        socket.to(`room ${roomId}`).emit("movePiece", { startSquare, endSquare, piece, roomId })
-    })
+    socket.on("movePiece", ({ startSquare, endSquare, piece, roomId }: MoveData)=> {
+        socket.to(`room ${roomId}`).emit("movePiece", { startSquare, endSquare, piece, roomId });
+    });
+
+    socket.on("castling", ({ startSquare, endSquare, piece, roomId }: MoveData)=> {
+        socket.to(`room ${roomId}`).emit("castling", { startSquare, endSquare, piece, roomId });
+    });
 });
 
 server.listen(port, () => { console.log(`Server is running on PORT ${port}...`) });

@@ -1,6 +1,6 @@
 import { MoveData } from "../../../../../../types";
 import { useAppDispatch } from "../../../../redux/hooks/hooks";
-import { runAnimationAndSaveHistory } from "../../../../redux/slices/gameSlice";
+import { runPieceMoveAnimation } from "../../../../redux/slices/gameSlice";
 import { socket } from "../../../../skocketIo";
 import styles from "./Promotion.module.css";
 
@@ -12,16 +12,9 @@ export default function Promotion({ moveData }: { moveData: MoveData }) {
         left = "50%";
     } 
 
-    // `${(moveData.startSquare.X + direction) * 12.5}%`;
-    // if(moveData.startSquare.X + direction > 7) {
-    //     left = `${4 * 12.5}%`
-    // } else if(moveData.startSquare.X + direction < 0) {
-    //     left = "0";
-    // } 
-
     function onClick(type: "queen" | "castle" | "bishop" | "knight") {
         const newMoveData: MoveData = { ...moveData, piece: { color: moveData.piece.color, type: type } };
-        dispatch(runAnimationAndSaveHistory(newMoveData));
+        dispatch(runPieceMoveAnimation(newMoveData));
         socket.emit("movePiece", newMoveData);
     }
 
