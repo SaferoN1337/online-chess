@@ -55,3 +55,10 @@ export interface ICastlingData {
         endSquare: ICoordinates,
     }
 }
+
+export type SpecialMoves = (
+    piece: IPiece,
+    coordinates: ICoordinates,
+    position: ISquare[][],
+    history: gameHistoryMove[]
+) => ICoordinates[]

@@ -11,18 +11,17 @@ type Function = (
 ) => gameHistoryMove[]
 
 const updateGemeHistory: Function = (history, activePiece, startSquare, endSquare, position, killedPiece) => {
-    const currenPosition: ISquare[][] = [...position].map(line => [...line].map(square => { 
-        return { ...square, piece: square.piece ? { ...square.piece } : null } 
+    const currenPosition: ISquare[][] = [...position].map(line => [...line].map(square => {
+        return { ...square, piece: square.piece ? { ...square.piece } : null };
     }));
-    currenPosition[endSquare.Y][endSquare.X].piece = { ...activePiece };
+    currenPosition[endSquare.Y][endSquare.X].piece = activePiece;
     const opponentColor: Colors = activePiece.color === "white" ? "black" : "white";
 
     markAllAttackedSquares(currenPosition, opponentColor);
 
     const kingsPosition: ISquare = currenPosition.flat(2).find(square => square.piece?.color === opponentColor && square.piece.type === "king") as ISquare;
 
-    return [...history.map(move => { return { ...move } }),
-    {
+    const newMove = {
         id: history.length,
         color: activePiece.color,
         type: activePiece.type,
@@ -30,7 +29,8 @@ const updateGemeHistory: Function = (history, activePiece, startSquare, endSquar
         endSquare: { X: endSquare.X, Y: endSquare.Y },
         killedPiece: killedPiece,
         check: kingsPosition.attacked
-    }];
+    }
+    return [...history, newMove];
 }
 
 export default updateGemeHistory;

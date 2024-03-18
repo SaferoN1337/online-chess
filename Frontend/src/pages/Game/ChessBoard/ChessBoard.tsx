@@ -3,7 +3,7 @@ import Square from "./Square/Square";
 import { useAppSelector, useAppDispatch } from "../../../redux/hooks/hooks"
 import { useEffect } from "react";
 import { runCastlingAnimation, runPieceMoveAnimation, showPiecePossibleMoves, showPromotionBlock } from "../../../redux/slices/gameSlice";
-import PieceModelForAnimation from "./PieceMoveAnimations/PieceMoveAnimation";
+import PieceMoveAnimation from "./PieceMoveAnimations/PieceMoveAnimation";
 import { socket } from "../../../skocketIo";
 import { MoveData } from "../../../../../types";
 import Promotion from "./Promotion/Promotion";
@@ -16,17 +16,17 @@ export default function ChessBoard() {
     const playerColor = useAppSelector((state) => state.users.playerColor);
     const currentPosition = [...useAppSelector((state) => state.game.currentPosition)].reverse();
     const movePieceModelTo = useAppSelector(state => state.game.movePieceModelTo);
-    const promotionMove = useAppSelector(state=> state.game.promotionMove);
-    const castlingData = useAppSelector(state=> state.game.castlingData);
-    console.log(currentPosition)
+    const promotionMove = useAppSelector(state => state.game.promotionMove);
+    const castlingData = useAppSelector(state => state.game.castlingData);
+    // console.log(currentPosition)
 
     useEffect(() => {
         if (activePiece && playerColor === activePiece.color && !movePieceModelTo) {
             dispatch(showPiecePossibleMoves());
         }
-        if(promotionMove) {
+        if (promotionMove) {
             dispatch(showPromotionBlock(null));
-        } 
+        }
     }, [activePiece]);
 
     useEffect(() => {
@@ -39,27 +39,25 @@ export default function ChessBoard() {
 
         socket.on("castling", castling);
         socket.on("movePiece", movePiece);
-        return () => {
-            socket.off("castling", castling);
-            socket.off("movePiece", movePiece);
-        }
+        // return () => {
+        //     socket.off("castling", castling);
+        //     socket.off("movePiece", movePiece);
+        // }
     }, []);
 
 
     return (
         <div className={`${styles.chessBoard} ${playerColor === "black" ? styles.rotate : ""}`}>
             {promotionMove ? <Promotion moveData={promotionMove} /> : null}
-            {activePiece && movePieceModelTo && activePiecePosition
-                ?
-                <PieceModelForAnimation
+            {!activePiece || !movePieceModelTo || !activePiecePosition ? null
+                :
+                <PieceMoveAnimation
                     start={activePiecePosition}
                     end={movePieceModelTo}
                     piece={activePiece}
                 />
-                :
-                null
             }
-            {castlingData? <CastlingAnimation  castlingData={castlingData}/> : null}
+            {castlingData ? <CastlingAnimation castlingData={castlingData} /> : null}
             {currentPosition.map((squaresList, rowIndex) => squaresList.map((square, columnIndex) => {
                 if (rowIndex % 2 === 0) {
                     if (rowIndex % 2 === 0 && columnIndex % 2 === 0) {

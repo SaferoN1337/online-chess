@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
-import { castling, runCastlingAnimation, runPieceMoveAnimation, showPromotionBlock } from "../../../../redux/slices/gameSlice";
+import { runCastlingAnimation, runPieceMoveAnimation, showPromotionBlock } from "../../../../redux/slices/gameSlice";
 import { socket } from "../../../../skocketIo";
 import { ISquare, MoveData } from "../../../../../../types";
 import styles from "../ChessBoard.module.css";
@@ -18,9 +18,7 @@ export default function Square({ color, square }: IProps) {
     const roomId = useLocation().pathname.replace("/game/", "");
     function move() {
         console.log(square.X, square.Y)
-
         if (activePiece && activePiecePosition && square.possibleMove) {
-            console.log(square.possibleMove)
             const moveData: MoveData = {
                 startSquare: { X: activePiecePosition.X, Y: activePiecePosition.Y },
                 endSquare: { X: square.X, Y: square.Y },

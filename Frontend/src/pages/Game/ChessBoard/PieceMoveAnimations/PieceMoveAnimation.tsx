@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
+import { useAppDispatch } from "../../../../redux/hooks/hooks";
 import { movePiece } from "../../../../redux/slices/gameSlice";
 import { ICoordinates, IPiece } from "../../../../../../types";
 import PieceModel from "./PieceModel/PieceModel";

@@ -13,7 +13,7 @@ export default function CastlingAnimation({ castlingData }: IProps) {
     const [castlePosition, setCastlePosition] = useState<ICoordinates>(castlingData.castleCorrdinates.startSquare);
     const [kingPosition, setKingPosition] = useState<ICoordinates>(castlingData.kingCorrdinates.startSquare);
     const [visibility, setVisibility] = useState<"hidden" | "visible">("hidden");
-    const delay = 300;
+    const delay: number = 300;
 
     useEffect(() => {
         setKingPosition(castlingData.kingCorrdinates.endSquare);

@@ -5,7 +5,7 @@ import allMovesOfThePiece from "../gameSliceAdditionalFunctions/moveFunctions/al
 import doesOpponentHaveAnyMove from "../gameSliceAdditionalFunctions/moveFunctions/doesOpponentHaveAnyMove";
 import updateGemeHistory from "../gameSliceAdditionalFunctions/moveFunctions/updateHistory";
 import renderDefaultPosition from "../gameSliceAdditionalFunctions/moveFunctions/renderDefaultPosition";
-import checkCastlingPossibility from "../gameSliceAdditionalFunctions/moveFunctions/movesOfSpecificPieces/castling";
+import checkUnusualMoves from "../gameSliceAdditionalFunctions/specialMoves/checkSpecialMoves";
 
 interface GameInitialState {
     currentPosition: ISquare[][],
@@ -44,11 +44,29 @@ export const gameSlice = createSlice({
         },
 
         runPieceMoveAnimation(state, action: PayloadAction<MoveData>) {
+            const history: gameHistoryMove[] = state.gameHistory;
             const currentPosition: ISquare[][] = [...state.currentPosition];
             const startSquare: ISquare = currentPosition[action.payload.startSquare.Y][action.payload.startSquare.X];
             const piece: IPiece = action.payload.piece;
             const endSquare: ISquare = currentPosition[action.payload.endSquare.Y][action.payload.endSquare.X];
-            const killedPiece: IPiece | null = endSquare.piece ? { ...endSquare.piece } : null;
+            let killedPiece: IPiece | null = endSquare.piece ? { ...endSquare.piece } : null;
+
+            if (piece.type === "pawn") {
+                const lastOpponentMove: gameHistoryMove | undefined = history[history.length - 1];
+                const opponentPawnStartLineIndex: number = piece.color === "white" ? 6 : 1;
+
+                if (lastOpponentMove && lastOpponentMove.startSquare.Y === opponentPawnStartLineIndex) {
+                    const isItClosestColumn: boolean = lastOpponentMove.startSquare.X === startSquare.X + 1 || lastOpponentMove.startSquare.X === startSquare.X - 1;
+                    const direction: number = piece.color === "white" ? 1 : -1;
+
+                    if (((piece.color === "white" && startSquare.Y === 4) || (piece.color === "black" && startSquare.Y === 3)) && isItClosestColumn) {
+                        if (lastOpponentMove.startSquare.X === endSquare.X, startSquare.Y + direction === endSquare.Y) {
+                            killedPiece = { type: lastOpponentMove.type, color: lastOpponentMove.color };
+                            currentPosition[lastOpponentMove.endSquare.Y][lastOpponentMove.endSquare.X].piece = null;
+                        }
+                    }
+                }
+            }
 
             startSquare.piece = null;
             state.activePiece = action.payload.piece;
@@ -139,9 +157,7 @@ export const gameSlice = createSlice({
             const activePiecePositionCoordinates = { X: state.activePiecePosition.X, Y: state.activePiecePosition.Y }
             listOfMoves = allMovesOfThePiece(state.activePiece, activePiecePositionCoordinates, currentPosition);
             listOfMoves = removeImpossibleMoves(listOfMoves, state.activePiece, activePiecePositionCoordinates, currentPosition);
-            if (state.activePiece.type === "king") {
-                listOfMoves = [...listOfMoves, ...checkCastlingPossibility(state.activePiece, activePiecePositionCoordinates, currentPosition, state.gameHistory)]
-            }
+            listOfMoves = [...listOfMoves, ...checkUnusualMoves(state.activePiece, activePiecePositionCoordinates, currentPosition, state.gameHistory)];
             listOfMoves.forEach(square => {
                 currentPosition[square.Y][square.X].possibleMove = true;
             });
