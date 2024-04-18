@@ -18,7 +18,7 @@ export default function ChessBoard() {
     const movePieceModelTo = useAppSelector(state => state.game.movePieceModelTo);
     const promotionMove = useAppSelector(state => state.game.promotionMove);
     const castlingData = useAppSelector(state => state.game.castlingData);
-    // console.log(currentPosition)
+    console.log(currentPosition)
 
     useEffect(() => {
         if (activePiece && playerColor === activePiece.color && !movePieceModelTo) {
@@ -39,10 +39,10 @@ export default function ChessBoard() {
 
         socket.on("castling", castling);
         socket.on("movePiece", movePiece);
-        // return () => {
-        //     socket.off("castling", castling);
-        //     socket.off("movePiece", movePiece);
-        // }
+        return () => {
+            socket.off("castling", castling);
+            socket.off("movePiece", movePiece);
+        }
     }, []);
 
 

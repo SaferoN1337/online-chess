@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Colors, ICastlingData, ICoordinates, IPiece, ISquare, MoveData, gameHistoryMove } from "../../../../types";
+import { Colors, ICastlingData, ICoordinates, IPiece, ISquare, ITimer, MoveData, gameHistoryMove } from "../../../../types";
 import removeImpossibleMoves from "../gameSliceAdditionalFunctions/moveFunctions/removeImpossibleMoves";
 import allMovesOfThePiece from "../gameSliceAdditionalFunctions/moveFunctions/allMovesOfThePiece";
 import doesOpponentHaveAnyMove from "../gameSliceAdditionalFunctions/moveFunctions/doesOpponentHaveAnyMove";
@@ -16,6 +16,7 @@ interface GameInitialState {
     movePieceModelTo: ICoordinates | null,
     promotionMove: MoveData | null,
     castlingData: ICastlingData | null;
+    timers: ITimer;
 }
 
 const initialState: GameInitialState = {
@@ -26,7 +27,12 @@ const initialState: GameInitialState = {
     moveColor: "white",
     movePieceModelTo: null,
     promotionMove: null,
-    castlingData: null
+    castlingData: null,
+    timers: {
+        timeOfThelastMove: Date.now(),
+        blackTimeLeft: 300,
+        whiteTimeLeft: 300
+    }
 }
 
 export const gameSlice = createSlice({
@@ -69,11 +75,13 @@ export const gameSlice = createSlice({
             }
 
             startSquare.piece = null;
+            state.timers = action.payload.timers;
             state.activePiece = action.payload.piece;
             state.activePiecePosition = action.payload.startSquare;
             state.moveColor = piece.color === "white" ? "black" : "white";
             state.gameHistory = updateGemeHistory(state.gameHistory, piece, startSquare, endSquare, currentPosition, killedPiece);
             state.movePieceModelTo = { X: action.payload.endSquare.X, Y: action.payload.endSquare.Y };
+            state.timers = { ...state.timers, timeOfThelastMove: Date.now() };
             state.currentPosition = currentPosition.map(line => line.map((square) => {
                 return { ...square, possibleMove: false }
             }));
@@ -121,6 +129,7 @@ export const gameSlice = createSlice({
                 }
             };
 
+            state.timers = action.payload.timers;
             state.gameHistory = updateGemeHistory(state.gameHistory, king, startSquare, endSquare, currentPosition, null);
             state.moveColor = action.payload.piece.color === "white" ? "black" : "white";
             state.castlingData = castlingData;
@@ -145,6 +154,7 @@ export const gameSlice = createSlice({
             state.castlingData = null;
             state.activePiece = null;
             state.activePiecePosition = null;
+            state.timers = { ...state.timers, timeOfThelastMove: Date.now() };
         },
 
         showPiecePossibleMoves(state) {
@@ -166,6 +176,10 @@ export const gameSlice = createSlice({
 
         showPromotionBlock(state, action: PayloadAction<MoveData | null>) {
             state.promotionMove = action.payload;
+        },
+
+        updateTimer(state, action: PayloadAction<ITimer>) {
+            state.timers = action.payload;
         }
     },
 })
@@ -177,7 +191,8 @@ export const {
     showPiecePossibleMoves,
     runPieceMoveAnimation,
     runCastlingAnimation,
-    showPromotionBlock
+    showPromotionBlock,
+    updateTimer
 } = gameSlice.actions
 
 export default gameSlice.reducer

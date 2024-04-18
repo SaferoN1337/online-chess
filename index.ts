@@ -33,12 +33,12 @@ io.on('connection', (socket) => {
         callback({ result: true });
     });
 
-    socket.on("movePiece", ({ startSquare, endSquare, piece, roomId }: MoveData)=> {
-        socket.to(`room ${roomId}`).emit("movePiece", { startSquare, endSquare, piece, roomId });
+    socket.on("movePiece", ({ startSquare, endSquare, piece, roomId, timers }: MoveData)=> {
+        socket.to(`room ${roomId}`).emit("movePiece", { startSquare, endSquare, piece, roomId, timers });
     });
 
-    socket.on("castling", ({ startSquare, endSquare, piece, roomId }: MoveData)=> {
-        socket.to(`room ${roomId}`).emit("castling", { startSquare, endSquare, piece, roomId });
+    socket.on("castling", ({ startSquare, endSquare, piece, roomId, timers }: MoveData)=> {
+        socket.to(`room ${roomId}`).emit("castling", { startSquare, endSquare, piece, roomId, timers });
     });
 });
 

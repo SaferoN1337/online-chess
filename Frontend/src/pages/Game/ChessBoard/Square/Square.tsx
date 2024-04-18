@@ -16,6 +16,8 @@ export default function Square({ color, square }: IProps) {
     const activePiece = useAppSelector(state => state.game.activePiece);
     const activePiecePosition = useAppSelector(state => state.game.activePiecePosition);
     const roomId = useLocation().pathname.replace("/game/", "");
+    const timers = useAppSelector(state=> state.game.timers);
+
     function move() {
         console.log(square.X, square.Y)
         if (activePiece && activePiecePosition && square.possibleMove) {
@@ -23,9 +25,9 @@ export default function Square({ color, square }: IProps) {
                 startSquare: { X: activePiecePosition.X, Y: activePiecePosition.Y },
                 endSquare: { X: square.X, Y: square.Y },
                 piece: activePiece,
-                roomId: +roomId
+                roomId: +roomId,
+                timers: { ...timers, timeOfThelastMove: Date.now() }
             }
-
 
             if (square.Y === 7 && activePiece.type === "pawn" && activePiece.color === "white") {
                 dispatch(showPromotionBlock(moveData));

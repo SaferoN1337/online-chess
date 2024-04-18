@@ -40,7 +40,8 @@ export interface MoveData {
     startSquare: ICoordinates,
     endSquare: ICoordinates,
     roomId: number,
-    piece: IPiece
+    piece: IPiece,
+    timers: ITimer
 }
 
 export interface ICastlingData {
@@ -62,3 +63,9 @@ export type SpecialMoves = (
     position: ISquare[][],
     history: gameHistoryMove[]
 ) => ICoordinates[]
+
+export interface ITimer {
+    blackTimeLeft: number,
+    whiteTimeLeft: number,
+    timeOfThelastMove: number,
+}

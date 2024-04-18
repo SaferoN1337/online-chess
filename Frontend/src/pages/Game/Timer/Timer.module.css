@@ -1,0 +1,26 @@
+.timerWrapper {
+    display: flex;
+    justify-content: space-between;
+    max-width: 720px;
+    padding: 20px;
+    margin: auto;
+}
+
+.whiteTimer {
+    width: 50%;
+    background-color: white;
+}
+
+.blackTimer {
+    width: 50%;
+    background-color: black;
+}
+
+.timerWrapper p {
+    font-size: 20px;
+    text-align: center;
+}
+
+.blackTimer p {
+    color: white;
+}

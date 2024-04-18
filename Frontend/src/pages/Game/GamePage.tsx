@@ -6,6 +6,7 @@ import styles from "./GamePage.module.css";
 import GameHistory from "./GameHistory/GameHistory";
 import { socket } from "../../skocketIo";
 import { useLocation } from "react-router-dom";
+import Timer from "./Timer/Timer";
 
 export default function GamePage() {
     const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ export default function GamePage() {
                     <ChessBoard />
                 </div>
             </div>
-
+            <Timer />
             <GameHistory />
             <button onClick={() => dispatch(setPlayerColor({ color: "white" }))}>white</button>
             <button onClick={() => dispatch(setPlayerColor({ color: "black" }))}>black</button>
