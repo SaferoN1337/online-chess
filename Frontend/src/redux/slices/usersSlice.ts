@@ -3,10 +3,14 @@ import { Colors } from "../../../../types";
 
 interface UsersInitialState {
     playerColor: Colors
+    accessToken: null | string
+    accessTokenExpiration: number
 }
 
 const initialState: UsersInitialState = {
-    playerColor: "white"
+    playerColor: "white",
+    accessToken: null,
+    accessTokenExpiration: 0,
 }
 
 export const usersSlice = createSlice({
@@ -19,9 +23,14 @@ export const usersSlice = createSlice({
 
         setPlayerColor: (state, action: PayloadAction<{ color: Colors }>)=> {
             state.playerColor = action.payload.color;
+        },
+
+        setAccessToken: (state, action: PayloadAction<{ accessToken: string | null, accessTokenExpiration: number }>)=> {
+            state.accessToken = action.payload.accessToken;
+            state.accessTokenExpiration = action.payload.accessTokenExpiration;
         }
     }
 });
 
-export const { updateUserColor, setPlayerColor } = usersSlice.actions
+export const { updateUserColor, setPlayerColor, setAccessToken } = usersSlice.actions
 export default usersSlice.reducer;

@@ -69,3 +69,15 @@ export interface ITimer {
     whiteTimeLeft: number,
     timeOfThelastMove: number,
 }
+
+export interface IUser {
+    id: number,
+    login: string,
+    password: string,
+    email: string,
+}
+
+export interface IAccessTokenData {
+    accessToken: string;
+    accessTokenExpiration: number;
+}

@@ -19,6 +19,7 @@ export default function GamePage() {
         });
     }, []);
 
+
     return (
         <div className={styles.content}>
             <div className={styles.mainBlock}>

@@ -30,8 +30,8 @@ const initialState: GameInitialState = {
     castlingData: null,
     timers: {
         timeOfThelastMove: Date.now(),
-        blackTimeLeft: 300,
-        whiteTimeLeft: 300
+        blackTimeLeft: 3000,
+        whiteTimeLeft: 3000
     }
 }
 

@@ -7,6 +7,10 @@ export default function useTimer(timeLeft: number) {
     let minutesStr: string = `${minutes}`;
     let hoursStr: string = "";
 
+    if(hours === -1) {
+        return "0 : 00";
+    }
+
     if(hours > 0) {
         hoursStr = `${hours} : `;
         if(minutes < 10) {
@@ -28,10 +32,6 @@ export default function useTimer(timeLeft: number) {
         minutesStr = "00";
     }
 
-    if(hours === -1) {
-        minutesStr = "0";
-    }
-    
     if(seconds < 20 && minutes === 0 && hours === 0) {
         return `${timeLeft.toFixed(1)}`;
     } 
