@@ -60,7 +60,7 @@ export default function ChessBoard() {
             {castlingData ? <CastlingAnimation castlingData={castlingData} /> : null}
             {currentPosition.map((squaresList, rowIndex) => squaresList.map((square, columnIndex) => {
                 if (rowIndex % 2 === 0) {
-                    if (rowIndex % 2 === 0 && columnIndex % 2 === 0) {
+                    if (columnIndex % 2 === 0) {
                         return <Square color="white" key={`${rowIndex}${columnIndex}`} square={square} />
                     } else {
                         return <Square color="black" key={`${rowIndex}${columnIndex}`} square={square} />

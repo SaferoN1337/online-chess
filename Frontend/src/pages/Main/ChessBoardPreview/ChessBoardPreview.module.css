@@ -1,0 +1,41 @@
+.chessBoard {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 200px;
+    position: relative;
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-wrap: wrap;
+    border: solid black 3px;
+}
+
+.square {
+    display: inline-block;
+    width: 12.5%;
+    height: 12.5%;
+}
+
+.piece {
+    width: 100%;
+    height: 100%;
+    max-width: 100px;
+    max-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.piece img {
+    width: 80%;
+    height: 80%;
+    max-width: 80px;
+    max-height: 80px;
+}
+
+.black {
+    background-color: grey;
+}
+
+.white {
+    background-color: white;
+}
