@@ -16,7 +16,7 @@ class Auth {
         const hashedPassword = bcrypt.hashSync(password, 10);
 
         if (user) {
-            res.json(JSON.stringify({ result: "error", messsage: "Пользователь с таким логином уже существует" }));
+            res.json({ result: "error", message: "Пользователь с таким логином уже существует" });
         } else {
             const user = await Users.createNewUser(login, email, hashedPassword);
 
@@ -30,13 +30,13 @@ class Auth {
         const { login, password } = req.body;
         const user = await Users.getUserByLoginOrId(login);
         if (!user) {
-            return res.json({ result: "error", messsage: "Неверный логин или пароль" });
+            return res.json({ result: "error", message: "Неверный логин или пароль" });
         }
 
         if (bcrypt.compareSync(password, user.password)) {
             this.createNewSession(req, res, user);
         } else {
-            res.json({ result: "error", messsage: "Неверный логин или пароль" });
+            res.json({ result: "error", message: "Неверный логин или пароль" });
         }
     }
 

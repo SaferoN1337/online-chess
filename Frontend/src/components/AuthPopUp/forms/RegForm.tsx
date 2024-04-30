@@ -1,9 +1,14 @@
+import styles from "../AuthPopUp.module.css";
+import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
-import styles from "./AuthPopUp.module.css";
-import { POSTApiRequest } from "../../apiRequest";
-import { IAccessTokenData } from "../../../../types";
-import { useAppDispatch } from "../../redux/hooks/hooks";
-import { setAccessToken } from "../../redux/slices/usersSlice";
+import { jwtDecode } from "jwt-decode";
+
+import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { setAccessToken } from "../../../redux/slices/usersSlice";
+import { setAuthAlertData } from "../../../redux/slices/componentSlice";
+
+import { POSTApiRequest } from "../../../apiRequest";
+import { IAccessTokenData, Session } from "../../../../../types";
 
 interface IFormInputs {
     "login": string,
@@ -20,7 +25,7 @@ interface InputsValueForAPI {
 
 interface IProps {
     loading: boolean,
-    setLoading: React.Dispatch<boolean>
+    setLoading: React.Dispatch<boolean>,
 }
 
 export default function RegForm({ loading, setLoading }: IProps) {
@@ -39,9 +44,12 @@ export default function RegForm({ loading, setLoading }: IProps) {
 
         if (response.result === "success") {
             console.log(response.data);
+            const session = jwtDecode(response.data.accessToken) as Session;
+            dispatch(setAuthAlertData({ type: "success", text: `Пользователь успешно зарегистрирован. Добро пожаловать ${session.login}!` }));
             dispatch(setAccessToken(response.data));
         } else {
-            console.log(response.message);
+            console.log(response);
+            dispatch(setAuthAlertData({ type: "warning", text: response.message }));
         }
     }
 
@@ -60,6 +68,7 @@ export default function RegForm({ loading, setLoading }: IProps) {
                         type="login"
                         placeholder="Логин"
                     />
+                    <img className={styles.icon} src="/icons/user-icon.png" alt="user" />
                     {!errors.login ? null :
                         <div className={styles.error}>
                             {errors.login.message}
@@ -76,6 +85,7 @@ export default function RegForm({ loading, setLoading }: IProps) {
                         type="email"
                         placeholder="Email"
                     />
+                    <img className={classNames(styles.icon, styles.emailIcon)} src="/icons/email-icon.png" alt="user" />
                     {!errors.email ? null :
                         <div className={styles.error}>
                             {errors.email.message}
@@ -92,6 +102,7 @@ export default function RegForm({ loading, setLoading }: IProps) {
                         type="password"
                         placeholder="Пароль"
                     />
+                    <img className={classNames(styles.icon, styles.passwordIcon)} src="/icons/password-icon.png" alt="password icon" />
                     {!errors.password ? null :
                         <div className={styles.error}>
                             {errors.password.message}
@@ -107,6 +118,7 @@ export default function RegForm({ loading, setLoading }: IProps) {
                         type="password"
                         placeholder="Повторить пароль"
                     />
+                    <img className={classNames(styles.icon, styles.passwordIcon)} src="/icons/password-icon.png" alt="password icon" />
                     {!errors.repeatPassword ? null :
                         <div className={styles.error}>
                             {errors.repeatPassword.message}

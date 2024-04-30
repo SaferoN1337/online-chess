@@ -1,3 +1,5 @@
+import { JwtPayload } from "jsonwebtoken";
+
 export interface ISquare {
     possibleMove: boolean,
     attacked: boolean,
@@ -80,4 +82,17 @@ export interface IUser {
 export interface IAccessTokenData {
     accessToken: string;
     accessTokenExpiration: number;
+}
+
+export interface IAlertData {
+    type: "success" | "warning" | "danger",
+    text: string
+}
+
+export interface Session extends JwtPayload {
+    login: string,
+    id: number,
+    email: string,
+    exp: number,
+    iat: number
 }

@@ -1,0 +1,45 @@
+.alertWrapper {
+    cursor: pointer;
+    position: absolute;
+    width: 100vw;
+    top: 60px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    transition: .3s;
+}
+
+.alertContent {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    margin: 10px 20px;
+    border-radius: 8px;
+}
+
+.success {
+    background-color: rgb(127, 255, 136);
+    border: solid 2px rgb(10, 181, 22);
+}
+
+.danger {
+    background-color: rgb(248, 96, 96);
+    border: solid 2px rgb(240, 5, 5);
+}
+
+.warning {
+    background-color: rgb(244, 159, 31);
+    border: solid 2px orangered;
+}
+
+.shown {
+    visibility: visible;
+    opacity: 1;
+}
+
+.hidden {
+    visibility: hidden;
+    opacity: 0;
+}

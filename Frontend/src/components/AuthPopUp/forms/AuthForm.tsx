@@ -1,9 +1,15 @@
+import styles from "../AuthPopUp.module.css";
+
 import { useForm, SubmitHandler } from "react-hook-form";
-import styles from "./AuthPopUp.module.css";
-import { POSTApiRequest } from "../../apiRequest";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
-import { setAccessToken } from "../../redux/slices/usersSlice";
-import { IAccessTokenData } from "../../../../types";
+import classNames from "classnames";
+
+import { POSTApiRequest } from "../../../apiRequest";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { setAccessToken } from "../../../redux/slices/usersSlice";
+
+import { IAccessTokenData, Session } from "../../../../../types";
+import { jwtDecode } from "jwt-decode";
+import { setAuthAlertData } from "../../../redux/slices/componentSlice";
 
 interface IFormInputs {
     "login": string,
@@ -12,7 +18,7 @@ interface IFormInputs {
 
 interface IProps {
     loading: boolean,
-    setLoading: React.Dispatch<boolean>
+    setLoading: React.Dispatch<boolean>,
 }
 
 export default function AuthForm({ loading, setLoading } : IProps) {
@@ -28,14 +34,18 @@ export default function AuthForm({ loading, setLoading } : IProps) {
         setLoading(false);
         if(response.result === "success") {
             console.log(response.data);
+            const session = jwtDecode(response.data.accessToken) as Session;
+            dispatch(setAuthAlertData({ type: "success", text: `Добро пожаловать, ${session.login}!` }))
             dispatch(setAccessToken(response.data));       
         } else {
+            dispatch(setAuthAlertData({ type: "danger", text: response.message }))
             console.log(response.message);
         }
     }
 
     async function checkAccessToken() {
         const response = await POSTApiRequest("/check-access-token", { accessToken });
+        dispatch(setAuthAlertData({ type: "success", text: `Токен проверен` }));
         console.log(response);
     }
 
@@ -64,6 +74,7 @@ export default function AuthForm({ loading, setLoading } : IProps) {
                         placeholder="Логин"
                         type="login"
                     />
+                    <img className={styles.icon} src="/icons/user-icon.png" alt="user" />
                     {!errors.login ? null :
                         <div className={styles.error}>
                             {errors.login.message}
@@ -78,6 +89,7 @@ export default function AuthForm({ loading, setLoading } : IProps) {
                         placeholder="Пароль"
                         type="password"
                     />
+                    <img className={classNames(styles.icon, styles.passwordIcon)} src="/icons/password-icon.png" alt="password icon" />
                     {!errors.password ? null :
                         <div className={styles.error}>
                             {errors.password.message}

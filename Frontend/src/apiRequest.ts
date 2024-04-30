@@ -19,7 +19,7 @@ export async function POSTApiRequest<B, D>(url: string, body: B, signal?: AbortS
 
         return await response.json();
     } catch(error) {
-        console.log("error")
-        return { result: "error", message: "Произошла непредвиденная ошибка" }
+        console.log(error);
+        return { result: "error", message: "Произошла непредвиденная ошибка" };
     }
 }
