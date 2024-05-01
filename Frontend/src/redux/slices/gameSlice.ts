@@ -1,11 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Colors, ICastlingData, ICoordinates, IPiece, ISquare, ITimer, MoveData, gameHistoryMove } from "../../../../types";
-import removeImpossibleMoves from "../gameSliceAdditionalFunctions/moveFunctions/removeImpossibleMoves";
-import allMovesOfThePiece from "../gameSliceAdditionalFunctions/moveFunctions/allMovesOfThePiece";
-import doesOpponentHaveAnyMove from "../gameSliceAdditionalFunctions/moveFunctions/doesOpponentHaveAnyMove";
-import updateGemeHistory from "../gameSliceAdditionalFunctions/moveFunctions/updateHistory";
-import renderDefaultPosition from "../gameSliceAdditionalFunctions/moveFunctions/renderDefaultPosition";
-import checkUnusualMoves from "../gameSliceAdditionalFunctions/specialMoves/checkSpecialMoves";
+import Moves from "../chessMovesLogic/Moves";
+import SpecialMoves from "../chessMovesLogic/SpecialMoves";
+import AdditionalFunctions from "../chessMovesLogic/AdditionalFunctions";
 
 interface GameInitialState {
     currentPosition: ISquare[][],
@@ -20,7 +17,7 @@ interface GameInitialState {
 }
 
 const initialState: GameInitialState = {
-    currentPosition: renderDefaultPosition(),
+    currentPosition: AdditionalFunctions.renderDefaultPosition(),
     activePiece: null,
     activePiecePosition: null,
     gameHistory: [],
@@ -79,7 +76,7 @@ export const gameSlice = createSlice({
             state.activePiece = action.payload.piece;
             state.activePiecePosition = action.payload.startSquare;
             state.moveColor = piece.color === "white" ? "black" : "white";
-            state.gameHistory = updateGemeHistory(state.gameHistory, piece, startSquare, endSquare, currentPosition, killedPiece);
+            state.gameHistory = AdditionalFunctions.updateGemeHistory(state.gameHistory, piece, startSquare, endSquare, currentPosition, killedPiece);
             state.movePieceModelTo = { X: action.payload.endSquare.X, Y: action.payload.endSquare.Y };
             state.timers = { ...state.timers, timeOfThelastMove: Date.now() };
             state.currentPosition = currentPosition.map(line => line.map((square) => {
@@ -98,7 +95,7 @@ export const gameSlice = createSlice({
             state.activePiece = null;
             state.activePiecePosition = null;
             state.movePieceModelTo = null;
-            const { result, text } = doesOpponentHaveAnyMove(currentPosition, activePiece.color === "white" ? "black" : "white");
+            const { result, text } = Moves.doesOpponentHaveAnyMove(currentPosition, activePiece.color === "white" ? "black" : "white");
             if (result === false && text) {
                 setTimeout(() => { alert(`Игра завршена ${text} GG`) }, 100);
             }
@@ -130,7 +127,7 @@ export const gameSlice = createSlice({
             };
 
             state.timers = action.payload.timers;
-            state.gameHistory = updateGemeHistory(state.gameHistory, king, startSquare, endSquare, currentPosition, null);
+            state.gameHistory = AdditionalFunctions.updateGemeHistory(state.gameHistory, king, startSquare, endSquare, currentPosition, null);
             state.moveColor = action.payload.piece.color === "white" ? "black" : "white";
             state.castlingData = castlingData;
             state.currentPosition = currentPosition;
@@ -146,7 +143,7 @@ export const gameSlice = createSlice({
             currentPosition[kingEndSquare.Y][kingEndSquare.X].piece = state.castlingData.king;
 
             currentPosition.map(line => line.map(square => square.possibleMove = false));
-            const { result, text } = doesOpponentHaveAnyMove(currentPosition, state.castlingData.king.color === "white" ? "black" : "white");
+            const { result, text } = Moves.doesOpponentHaveAnyMove(currentPosition, state.castlingData.king.color === "white" ? "black" : "white");
             if (result === false && text) {
                 setTimeout(() => { alert(`Игра завршена ${text} GG`) }, 100);
             }
@@ -165,9 +162,9 @@ export const gameSlice = createSlice({
             }));
 
             const activePiecePositionCoordinates = { X: state.activePiecePosition.X, Y: state.activePiecePosition.Y }
-            listOfMoves = allMovesOfThePiece(state.activePiece, activePiecePositionCoordinates, currentPosition);
-            listOfMoves = removeImpossibleMoves(listOfMoves, state.activePiece, activePiecePositionCoordinates, currentPosition);
-            listOfMoves = [...listOfMoves, ...checkUnusualMoves(state.activePiece, activePiecePositionCoordinates, currentPosition, state.gameHistory)];
+            listOfMoves = Moves.allMovesOfThePiece(state.activePiece, activePiecePositionCoordinates, currentPosition);
+            listOfMoves = Moves.removeImpossibleMoves(listOfMoves, state.activePiece, activePiecePositionCoordinates, currentPosition);
+            listOfMoves = [...listOfMoves, ...SpecialMoves.checkSpecialMovesPossibility(state.activePiece, activePiecePositionCoordinates, currentPosition, state.gameHistory)];
             listOfMoves.forEach(square => {
                 currentPosition[square.Y][square.X].possibleMove = true;
             });

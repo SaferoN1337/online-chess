@@ -59,13 +59,6 @@ export interface ICastlingData {
     }
 }
 
-export type SpecialMoves = (
-    piece: IPiece,
-    coordinates: ICoordinates,
-    position: ISquare[][],
-    history: gameHistoryMove[]
-) => ICoordinates[]
-
 export interface ITimer {
     blackTimeLeft: number,
     whiteTimeLeft: number,
