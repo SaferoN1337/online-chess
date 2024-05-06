@@ -8,6 +8,7 @@ import { socket } from "../../../skocketIo";
 import { MoveData } from "../../../../../types";
 import Promotion from "./Promotion/Promotion";
 import CastlingAnimation from "./PieceMoveAnimations/CastlingAnimation";
+import { POSTApiRequest } from "../../../apiRequest";
 
 export default function ChessBoard() {
     const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ export default function ChessBoard() {
     const movePieceModelTo = useAppSelector(state => state.game.movePieceModelTo);
     const promotionMove = useAppSelector(state => state.game.promotionMove);
     const castlingData = useAppSelector(state => state.game.castlingData);
+    
     console.log(currentPosition)
 
     useEffect(() => {
@@ -36,7 +38,7 @@ export default function ChessBoard() {
         function castling(moveData: MoveData) {
             dispatch(runCastlingAnimation(moveData));
         }
-
+        
         socket.on("castling", castling);
         socket.on("movePiece", movePiece);
         return () => {
@@ -45,6 +47,9 @@ export default function ChessBoard() {
         }
     }, []);
 
+    // async function requestGameData(id: number) {
+    //     const { result, data } = await POSTApiRequest<{ id: number }, IGameData>("/get-game-data", { id: id });
+    // }
 
     return (
         <div className={`${styles.chessBoard} ${playerColor === "black" ? styles.rotate : ""}`}>

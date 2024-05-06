@@ -1,5 +1,5 @@
-import { Request, Response } from "express"
-import { DBIUser } from "../databaseRequests/DBRequestsTypes"
+import { Request, Response } from "express";
+import { DBIUser } from "../databaseRequests/User/UserTypes";
 
 interface IRegistrationRequest extends Request {
     body: {

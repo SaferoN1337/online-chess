@@ -1,16 +1,20 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IAlertData } from "../../../../types";
+import { IAlertData, IGameData } from "../../../../types";
 
 interface initialStates {
     showRegForm: boolean,
     showAuthPopUp: boolean,
-    authAlertData: null | IAlertData
+    authAlertData: null | IAlertData,
+    showGameResult: boolean,
+    listOfGames: IGameData[]
 }
 
 const initialState: initialStates = {
     showRegForm: false,
-    showAuthPopUp: true,
-    authAlertData: null
+    showAuthPopUp: false,
+    authAlertData: null,
+    showGameResult: false,
+    listOfGames: []
 }
 
 export const componentsSlice = createSlice({
@@ -27,9 +31,23 @@ export const componentsSlice = createSlice({
 
         setAuthAlertData(state, action: PayloadAction<null | IAlertData>) {
             state.authAlertData = action.payload;
+        },
+
+        setShowGameResult(state, action: PayloadAction<boolean>) {
+            state.showGameResult = action.payload;
+        },
+
+        setListOfGames(state, action: PayloadAction<IGameData[]>) {
+            state.listOfGames = action.payload;
         }
     }
 })
 
-export const { showOrHideAuthPopUp, switchFormToReg, setAuthAlertData } = componentsSlice.actions;
+export const {
+    showOrHideAuthPopUp,
+    switchFormToReg,
+    setAuthAlertData,
+    setShowGameResult,
+    setListOfGames
+} = componentsSlice.actions;
 export default componentsSlice.reducer;

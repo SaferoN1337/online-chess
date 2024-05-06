@@ -1,9 +1,9 @@
 .chessBoard {
     box-sizing: border-box;
     width: 100%;
-    max-width: 200px;
+    width: 200px;
+    height: 200px;
     position: relative;
-    aspect-ratio: 1/1;
     display: flex;
     flex-wrap: wrap;
     border: solid black 3px;

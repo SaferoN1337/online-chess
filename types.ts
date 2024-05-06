@@ -89,3 +89,19 @@ export interface Session extends JwtPayload {
     exp: number,
     iat: number
 }
+
+export interface IGameResult {
+    "winner": Colors | "draw",
+    "description": string
+}
+
+export interface IGameData {
+    id: number,
+    position: ISquare[][],
+    player1: string,
+    player2: string,
+    timers: ITimer,
+    result: null | IGameResult
+}
+
+export type Loading = "loading" | "fulfilled"

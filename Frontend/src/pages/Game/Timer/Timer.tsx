@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import styles from "./Timer.module.css";
-import { updateTimer } from "../../../redux/slices/gameSlice";
+import { updateGameResult, updateTimer } from "../../../redux/slices/gameSlice";
 import useTimer from "./useTimer";
 
 export default function Timer() {
     const timers = useAppSelector(state => state.game.timers);
     const moveColor = useAppSelector(state => state.game.moveColor);
+    const gameResult = useAppSelector(state=> state.game.gameResult)
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -18,7 +19,7 @@ export default function Timer() {
             if (moveColor === "black") {
                 if (timeData.blackTimeLeft <= 0) {
                     clearInterval(timer);
-                    return alert("Чёрные проиграли по времени");
+                    dispatch(updateGameResult({ description: `Белые победили по времени`, winner: "white" }));
                 }
 
                 timeData.blackTimeLeft = timeData.blackTimeLeft - (currentTime - timeData.timeOfThelastMove) / 1000;
@@ -26,7 +27,7 @@ export default function Timer() {
             } else {
                 if (timeData.whiteTimeLeft <= 0) {
                     clearInterval(timer);
-                    return alert("Белые проиграли по времени");
+                    dispatch(updateGameResult({ description: `Чёрные победили по времени`, winner: "black" }));
                 }
 
                 timeData.whiteTimeLeft = timeData.whiteTimeLeft - (currentTime - timeData.timeOfThelastMove) / 1000;
@@ -35,6 +36,9 @@ export default function Timer() {
             dispatch(updateTimer(timeData));
         }, 100);
 
+        if(gameResult) {
+            clearInterval(timer);
+        }
         return () => {
             clearInterval(timer);
         }

@@ -13,8 +13,10 @@ export default function Pieces({ piece, X, Y }: IProps) {
     const activePiece = useAppSelector(state => state.game.activePiece);
     const playerColor = useAppSelector(state => state.users.playerColor);
     const moveColor = useAppSelector(state=> state.game.moveColor);
-    
+    const gameResult = useAppSelector(state=> state.game.gameResult);
+
     function setActivePiece() {
+        if(gameResult) return;
         if (!activePiece || activePiece?.color === piece.color) {
             dispatch(updateActivePiece({ piece, X, Y }));
         }

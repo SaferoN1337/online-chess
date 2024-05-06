@@ -1,9 +1,9 @@
 import mysql from "mysql2/promise";
-import { DBIUser } from "./DBRequestsTypes";
-import { config } from "../../mysqlConfig";
+import { CreateNewUser, DBIUser, GetUserByLoginOrId } from "./UserTypes";
+import { config } from "../../../mysqlConfig";
 
 class Users {
-    static async getUserByLoginOrId(parameter: string | number) {
+    static getUserByLoginOrId : GetUserByLoginOrId = async (parameter)=> {
         const connection = await mysql.createConnection(config);
         try {
             if (typeof parameter === "string") {
@@ -15,12 +15,13 @@ class Users {
             }
         } catch (error) {
             console.log(error);
+            return;
         } finally {
             connection.end();
         }
     }
 
-    static async createNewUser(login: string, email: string, hashedPassword: string) {
+    static createNewUser: CreateNewUser = async (login, email, hashedPassword)=> {
         const connection = await mysql.createConnection(config);
         try {
             await connection.execute(`INSERT INTO users (login, email, password) VALUES ('${login}', '${email}', '${hashedPassword}');`);

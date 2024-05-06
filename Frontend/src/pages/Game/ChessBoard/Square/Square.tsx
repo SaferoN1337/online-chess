@@ -1,10 +1,10 @@
+import styles from "../ChessBoard.module.css";
 import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
 import { runCastlingAnimation, runPieceMoveAnimation, showPromotionBlock } from "../../../../redux/slices/gameSlice";
 import { socket } from "../../../../skocketIo";
-import { ISquare, MoveData } from "../../../../../../types";
-import styles from "../ChessBoard.module.css";
 import Pieces from "../Pieces/Pieces";
+import { ISquare, MoveData } from "../../../../../../types";
 
 interface IProps {
     color: "white" | "black",
@@ -17,8 +17,10 @@ export default function Square({ color, square }: IProps) {
     const activePiecePosition = useAppSelector(state => state.game.activePiecePosition);
     const roomId = useLocation().pathname.replace("/game/", "");
     const timers = useAppSelector(state=> state.game.timers);
+    const gameResult = useAppSelector(state=> state.game.gameResult);
 
     function move() {
+        if(gameResult) return;
         console.log(square.X, square.Y)
         if (activePiece && activePiecePosition && square.possibleMove) {
             const moveData: MoveData = {

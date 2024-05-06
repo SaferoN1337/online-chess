@@ -1,10 +1,9 @@
 import mysql from "mysql2/promise";
-import { config } from "../../mysqlConfig";
-import { FingerprintResult } from "express-fingerprint";
-import { DBRefreshSessionData } from "./DBRequestsTypes";
+import { config } from "../../../mysqlConfig";
+import { CreateRefreshSession, DBRefreshSessionData, DeleteRefreshSession, GetRefreshSession } from "./RefreshSessionTypes";
 
 class RefreshSession {
-    static async getRefreshSession(refreshToken: string) {
+    static getRefreshSession: GetRefreshSession = async (refreshToken)=> {
         const connection = await mysql.createConnection(config);
         try {
             const [sessions] = await connection.execute<DBRefreshSessionData[]>(`SELECT * FROM refresh_session WHERE refresh_token = '${refreshToken}'`);
@@ -17,7 +16,7 @@ class RefreshSession {
         }
     }
 
-    static async createRefreshSession(id: number, refreshToken: string, accessToken: string, fingerprint: FingerprintResult) {
+    static createRefreshSession: CreateRefreshSession = async (id, refreshToken, accessToken, fingerprint)=> {
         const connection = await mysql.createConnection(config);
         try {
             await connection.execute(`INSERT INTO refresh_session (user_id, refresh_token, access_token, fingerprint) VALUES ('${id}', '${refreshToken}', '${accessToken}', '${fingerprint.hash}')`);
@@ -28,7 +27,7 @@ class RefreshSession {
         }
     }
 
-    static async deleteRefreshSession(refreshToken: string) {
+    static deleteRefreshSession: DeleteRefreshSession = async (refreshToken)=> {
         const connection = await mysql.createConnection(config);
         try {
             await connection.execute(`DELETE FROM refresh_session WHERE refresh_token = '${refreshToken}'`);

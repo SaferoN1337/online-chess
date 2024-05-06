@@ -11,8 +11,13 @@ export default function socketIoHandler(socket: Socket<any>) {
 
     socket.on("enterTheRoom", ({ roomId }: { roomId: number }, callback: SocketIoCallback) => {
         socket.join(`room ${roomId}`);
-        console.log(`user joined room ${roomId}`);
+        console.log(`user joined the room ${roomId}`);
         callback({ result: true });
+    });
+
+    socket.on("userLeftTheRoom", ({ roomId }: { roomId: number })=> {
+        socket.leave(`room ${roomId}`);
+        console.log(`user left the room ${roomId}`);
     });
 
     socket.on("movePiece", ({ startSquare, endSquare, piece, roomId, timers }: MoveData) => {
@@ -22,5 +27,4 @@ export default function socketIoHandler(socket: Socket<any>) {
     socket.on("castling", ({ startSquare, endSquare, piece, roomId, timers }: MoveData) => {
         socket.to(`room ${roomId}`).emit("castling", { startSquare, endSquare, piece, roomId, timers });
     });
-
 }

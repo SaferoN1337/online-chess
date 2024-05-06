@@ -1,6 +1,6 @@
 
 import styles from "./ChessBoardPreview.module.css";
-import { ISquare } from "../../../../../types";
+import { ISquare } from "../../../../../../types";
 import PreviewSquare from "./PreviewSquare";
 
 interface IProps {

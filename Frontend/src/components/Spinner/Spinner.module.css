@@ -1,0 +1,48 @@
+.spinnerWrapper {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    width: 100px;
+    height: 100px;
+    background: url("/icons/spinning-circle.png") no-repeat;
+    background-size: cover;
+    animation: ease-in-out infinite 1s spinner1;
+    transition: 1s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.figure {
+    width: 70px;
+    height: 70px;
+    background: url("/icons/knight-icon.png") no-repeat;
+    background-size: cover; 
+    animation: ease-in-out infinite 1s reverseSpiner;
+    transition: 1s;
+}
+
+@keyframes spinner1 {
+    0% {
+        rotate: 0;
+    }
+
+    100% {
+        rotate: 360deg;
+    }
+}
+
+@keyframes reverseSpiner {
+    0% {
+        rotate: 0;
+    }
+
+    100% {
+        rotate: -360deg;
+    }
+}

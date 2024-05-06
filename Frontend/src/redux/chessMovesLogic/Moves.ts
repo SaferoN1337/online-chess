@@ -244,7 +244,7 @@ class Moves {
     
             listOfMoves = this.removeImpossibleMoves(listOfMoves, square.piece as IPiece, coordinates, position);
             if (listOfMoves.length !== 0) {
-                return { result: true };
+                return null;
             }
         }
     
@@ -252,9 +252,10 @@ class Moves {
         
         const kingsPosition: ISquare = currenPosition.flat(2).find(square => square.piece?.color === playerColor && square.piece.type === "king") as ISquare;
         if (kingsPosition.attacked === true) {
-            return { result: false, text: '"Мат"' };
+            const winnerColor = playerColor === "white" ? "black" : "white";
+            return { description: `${winnerColor === "white" ? "Белые" : "Черные"} победили ("Мат")`, winner: winnerColor };
         }
-        return { result: false, text: '"Пат"' };
+        return { description: `Ничья ("Пат")`, winner: 'draw' };
     }
 }
 

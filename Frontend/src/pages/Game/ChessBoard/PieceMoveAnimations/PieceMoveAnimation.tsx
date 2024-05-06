@@ -10,7 +10,7 @@ interface IProps {
     piece: IPiece
 }
 
-export default function PieceModelForAnimation({ start, end, piece }: IProps) {
+export default function PieceMoveAnimation({ start, end, piece }: IProps) {
     const dispatch = useAppDispatch();
     const [piecePosition, setPiecePosition] = useState<ICoordinates>(start);
     const [visibility, setVisibility] = useState<"hidden" | "visible">("hidden");

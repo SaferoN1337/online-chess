@@ -1,0 +1,63 @@
+.contentWrapper {
+    box-sizing: border-box;
+    width: 350px;
+    height: 400px;
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.content {
+    padding: 20px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(241, 224, 193);
+}
+
+.content h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 26px;
+    color: white;
+    text-shadow: gray 2px 2px 5px;
+}
+
+.content p {
+    font-size: 20px;
+    margin: 0;
+    margin-top: 15px;
+    text-align: center;
+    color: white;
+    text-shadow: gray 2px 2px 5px;
+    margin-bottom: 40px;
+}
+
+.content .congratulation {
+    font-size: 22px;
+    margin-bottom: 0;
+}
+
+.content button {
+    outline: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    height: 33px;
+    background-color: rgb(145, 196, 69);
+    color: white;
+    font-size: 16px;
+    border: solid rgb(33, 165, 29) 2px;
+    border-radius: 10px;
+    margin-top: 20px;
+    transition: 0.2s;
+}
+
+.content button:hover {
+    background-color: rgb(175, 236, 84);
+}
+
+.content button:active {
+    background-color: rgb(134, 182, 63); 
+}

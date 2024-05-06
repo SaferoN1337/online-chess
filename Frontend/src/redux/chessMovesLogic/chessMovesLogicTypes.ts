@@ -1,4 +1,4 @@
-import { ICoordinates, IPiece, ISquare, gameHistoryMove } from "../../../../types";
+import { ICoordinates, IGameResult, IPiece, ISquare, gameHistoryMove } from "../../../../types";
 
 export type MarkAllAttackedSquares = (
     position: ISquare[][], 
@@ -14,8 +14,8 @@ export type RemoveImpossibleMoves = (
 
 export type DoesOpponentHaveAnyMove = (
     position: ISquare[][], 
-    playerColor: "white" | "black"
-)=> { result: boolean, text?: string }
+    playerColor: "white" | "black",
+)=> IGameResult | null
 
 export type SpecialMovesParameters = (
     piece: IPiece,

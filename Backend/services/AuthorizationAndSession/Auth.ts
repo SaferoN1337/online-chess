@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
 
-import Users from "../databaseRequests/Users";
+import Users from "../databaseRequests/User/User";
 import Token from "./Token/Token";
-import RefreshSession from "../databaseRequests/RefreshSession";
+import RefreshSession from "../databaseRequests/RefreshSession/RefreshSession";
 
 import { FingerprintResult } from "express-fingerprint";
 import { AuthenticationFN, CheckAndRefreshToken, CreateNewSession, RigistrationFN } from "./AuthTypes";

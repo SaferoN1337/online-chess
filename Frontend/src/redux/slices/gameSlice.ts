@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Colors, ICastlingData, ICoordinates, IPiece, ISquare, ITimer, MoveData, gameHistoryMove } from "../../../../types";
+import { Colors, ICastlingData, ICoordinates, IGameData, IGameResult, IPiece, ISquare, ITimer, MoveData, gameHistoryMove } from "../../../../types";
 import Moves from "../chessMovesLogic/Moves";
 import SpecialMoves from "../chessMovesLogic/SpecialMoves";
 import AdditionalFunctions from "../chessMovesLogic/AdditionalFunctions";
@@ -14,6 +14,7 @@ interface GameInitialState {
     promotionMove: MoveData | null,
     castlingData: ICastlingData | null;
     timers: ITimer;
+    gameResult: null | IGameResult;
 }
 
 const initialState: GameInitialState = {
@@ -27,9 +28,10 @@ const initialState: GameInitialState = {
     castlingData: null,
     timers: {
         timeOfThelastMove: Date.now(),
-        blackTimeLeft: 3000,
-        whiteTimeLeft: 3000
-    }
+        blackTimeLeft: 10,
+        whiteTimeLeft: 10
+    },
+    gameResult: null
 }
 
 export const gameSlice = createSlice({
@@ -40,6 +42,10 @@ export const gameSlice = createSlice({
             if (action.payload === null) {
                 state.activePiece = null;
                 state.activePiecePosition = null;
+                state.currentPosition = [...state.currentPosition].map(row => row.map(square => {
+                    square.possibleMove = false
+                    return square;
+                }));
             } else {
                 state.activePiece = action.payload.piece;
                 state.activePiecePosition = { X: action.payload.X, Y: action.payload.Y };
@@ -95,9 +101,9 @@ export const gameSlice = createSlice({
             state.activePiece = null;
             state.activePiecePosition = null;
             state.movePieceModelTo = null;
-            const { result, text } = Moves.doesOpponentHaveAnyMove(currentPosition, activePiece.color === "white" ? "black" : "white");
-            if (result === false && text) {
-                setTimeout(() => { alert(`Игра завршена ${text} GG`) }, 100);
+            const result = Moves.doesOpponentHaveAnyMove(currentPosition, activePiece.color === "white" ? "black" : "white");
+            if (result) {
+                state.gameResult = result;
             }
         },
 
@@ -143,9 +149,9 @@ export const gameSlice = createSlice({
             currentPosition[kingEndSquare.Y][kingEndSquare.X].piece = state.castlingData.king;
 
             currentPosition.map(line => line.map(square => square.possibleMove = false));
-            const { result, text } = Moves.doesOpponentHaveAnyMove(currentPosition, state.castlingData.king.color === "white" ? "black" : "white");
-            if (result === false && text) {
-                setTimeout(() => { alert(`Игра завршена ${text} GG`) }, 100);
+            const result = Moves.doesOpponentHaveAnyMove(currentPosition, state.castlingData.king.color === "white" ? "black" : "white");
+            if (result) {
+                state.gameResult = result;
             }
 
             state.castlingData = null;
@@ -177,6 +183,16 @@ export const gameSlice = createSlice({
 
         updateTimer(state, action: PayloadAction<ITimer>) {
             state.timers = action.payload;
+        },
+
+        updateGameResult(state, action: PayloadAction<IGameResult>) {
+            state.gameResult = action.payload;
+        },
+
+        updateGameData(state, action: PayloadAction<IGameData>) {
+            state.currentPosition = action.payload.position;
+            state.timers = action.payload.timers,
+            state.gameResult = action.payload.result
         }
     },
 })
@@ -189,7 +205,9 @@ export const {
     runPieceMoveAnimation,
     runCastlingAnimation,
     showPromotionBlock,
-    updateTimer
+    updateTimer,
+    updateGameResult,
+    updateGameData
 } = gameSlice.actions
 
 export default gameSlice.reducer
