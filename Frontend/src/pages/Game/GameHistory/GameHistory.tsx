@@ -1,12 +1,12 @@
 import { useAppSelector } from "../../../redux/hooks/hooks";
-import { gameHistoryMove } from "../../../../../types";
+import { GameHistoryMove } from "../../../../../types";
 import styles from "./GameHistory.module.css";
 import MoveInfo from "./MoveInfo";
 
 export default function GameHistory() {
-    const history: gameHistoryMove[] = [...useAppSelector(state => state.game.gameHistory)].reverse();
-    const blackMoves: gameHistoryMove[] = [];
-    const whiteMoves: gameHistoryMove[] = [];
+    const history: GameHistoryMove[] = [...useAppSelector(state => state.game.gameHistory)].reverse();
+    const blackMoves: GameHistoryMove[] = [];
+    const whiteMoves: GameHistoryMove[] = [];
 
     history.forEach(move => {
         if (move.color === "white") {

@@ -1,5 +1,5 @@
 import Moves from "./Moves";
-import { ICoordinates, ISquare, gameHistoryMove } from "../../../../types";
+import { ICoordinates, ISquare, GameHistoryMove } from "../../../../types";
 import { SpecialMovesParameters } from "./chessMovesLogicTypes";
 
 class SpecialMoves {
@@ -84,7 +84,7 @@ class SpecialMoves {
         const currentPosition: ISquare[][] = [...position].map(line => [...line].map(square => { return { ...square } }));
         const listOfMoves: ICoordinates[] = [];
         const opponentPawnStartLineIndex: number = piece.color === "white" ? 6 : 1;
-        const lastMove: gameHistoryMove = { ...history[history.length - 1] };
+        const lastMove: GameHistoryMove = { ...history[history.length - 1] };
     
         if (!lastMove || lastMove.type !== "pawn" || lastMove.color === piece.color) {
             return [];

@@ -28,7 +28,7 @@ export type CheckMoves = (
     currentPosition: ISquare[][],
 ) => ICoordinates[]
 
-export interface gameHistoryMove {
+export interface GameHistoryMove {
     id: number,
     type: PieceTypes,
     color: Colors,
@@ -43,7 +43,7 @@ export interface MoveData {
     endSquare: ICoordinates,
     roomId: number,
     piece: IPiece,
-    timers: ITimer
+    timers: ITimer,
 }
 
 export interface ICastlingData {
@@ -105,3 +105,7 @@ export interface IGameData {
 }
 
 export type Loading = "loading" | "fulfilled"
+
+export interface SearchParameters {
+    started?: boolean, 
+}

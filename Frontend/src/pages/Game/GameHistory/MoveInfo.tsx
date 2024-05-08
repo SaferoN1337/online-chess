@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
-import { gameHistoryMove } from "../../../../../types";
+import { GameHistoryMove } from "../../../../../types";
 import styles from "./GameHistory.module.css";
 
-export default function MoveInfo({ move }: { move: gameHistoryMove }) {
+export default function MoveInfo({ move }: { move: GameHistoryMove }) {
     const letters: string[] = ["A", "B", "C", "D", "E", "F", "G", "H"];
     let text: ReactNode = <>
         {`${letters[move.startSquare.X]}${move.startSquare.Y + 1} - `}

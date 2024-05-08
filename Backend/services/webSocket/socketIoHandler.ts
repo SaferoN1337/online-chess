@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
-import { MoveData } from "../../../types";
+import { ISquare, MoveData } from "../../../types";
+import Game from "../databaseRequests/Game/Game";
 
 type SocketIoCallback = ({ result }: { result: boolean }) => void;
 
@@ -20,7 +21,17 @@ export default function socketIoHandler(socket: Socket<any>) {
         console.log(`user left the room ${roomId}`);
     });
 
-    socket.on("movePiece", ({ startSquare, endSquare, piece, roomId, timers }: MoveData) => {
+    socket.on("movePiece", async ({ startSquare, endSquare, piece, roomId, timers }: MoveData) => {
+        const game = await Game.getGameDataById(roomId);
+        if(!game) return;
+
+        const newPosition: ISquare[][] = [...game.position]; 
+        newPosition[startSquare.Y][startSquare.X].piece = null;
+        newPosition[endSquare.Y][endSquare.X].piece = piece;
+        
+        const result = Game.updateGameDataAfterMove(roomId, newPosition, timers);
+        if(!result) return;
+
         socket.to(`room ${roomId}`).emit("movePiece", { startSquare, endSquare, piece, roomId, timers });
     });
 

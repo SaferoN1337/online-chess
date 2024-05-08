@@ -63,7 +63,7 @@ export default function ListOfGames() {
 
     return (
         <div className={styles.listOfGamesWrapper}>
-            {loading === "loading" ? <Spinner /> :
+            {loading === "loading" && listOfGames.length === 0 ? <Spinner /> :
                 <div className={styles.listOfGames}>
                     {listOfGames.map((game) =>
                         <Link className={styles.gamePreviewWrapper} to={"/game/" + game.id} key={game.id}>

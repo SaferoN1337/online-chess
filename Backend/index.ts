@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import socketIoHandler from "./services/websocket/socketIoHandler";
-import { router } from "./Routers/Router";
+import socketIoHandler from "./services/webSocket/socketIoHandler";
+import { router } from "./Router/Router";
 import Fingerprint from "express-fingerprint";
 import cookieParser from "cookie-parser";
 

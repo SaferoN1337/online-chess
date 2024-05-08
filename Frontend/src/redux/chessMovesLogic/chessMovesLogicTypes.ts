@@ -1,4 +1,4 @@
-import { ICoordinates, IGameResult, IPiece, ISquare, gameHistoryMove } from "../../../../types";
+import { ICoordinates, IGameResult, IPiece, ISquare, GameHistoryMove } from "../../../../types";
 
 export type MarkAllAttackedSquares = (
     position: ISquare[][], 
@@ -21,14 +21,14 @@ export type SpecialMovesParameters = (
     piece: IPiece,
     coordinates: ICoordinates,
     position: ISquare[][],
-    history: gameHistoryMove[]
+    history: GameHistoryMove[]
 ) => ICoordinates[]
 
 export type UpdateHistory = (
-    history: gameHistoryMove[],
+    history: GameHistoryMove[],
     activePiece: IPiece,
     startSquare: ISquare,
     endSquare: ISquare,
     position: ISquare[][],
     killedPiece: IPiece | null
-) => gameHistoryMove[]
+) => GameHistoryMove[]

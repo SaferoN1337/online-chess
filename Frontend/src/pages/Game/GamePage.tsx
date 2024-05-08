@@ -9,8 +9,9 @@ import { useLocation } from "react-router-dom";
 import Timer from "./Timer/Timer";
 import GameResult from "./GameResult/GameResult";
 import { updateGameData } from "../../redux/slices/gameSlice";
-import { Loading } from "../../../../types";
+import { GameHistoryMove, IGameData, Loading } from "../../../../types";
 import Spinner from "../../components/Spinner/Spinner";
+import { POSTApiRequest } from "../../apiRequest";
 
 export default function GamePage() {
     const dispatch = useAppDispatch();
@@ -26,14 +27,27 @@ export default function GamePage() {
             console.log(`user connected to the room ${roomId} with result ${response.result}`);
         });
 
-        if(currentGameData) {
-            dispatch(updateGameData(currentGameData));
-        }
-
         return ()=> {
             socket.emit("userLeftTheRoom",  { roomId: roomId });
         }
     }, []);
+
+    useEffect(()=> {
+        if(currentGameData) {
+            dispatch(updateGameData(currentGameData));
+        }
+
+        requestGameData();
+    }, []);
+
+    async function requestGameData() {
+        setLoading("loading");
+        const response = await POSTApiRequest<{ id: number }, { gameData: IGameData, gameHistory: GameHistoryMove[] }>("/request-game-data", { id: +roomId });
+        if(response.result === "success") {
+            dispatch(updateGameData(response.data.gameData));
+        }
+        setLoading("fulfilled");
+    }
 
     return (
         <>

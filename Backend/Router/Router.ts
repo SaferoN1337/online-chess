@@ -18,6 +18,10 @@ router.post("/request-list-of-games", (req, res)=> {
     console.log(req.body);
 });
 
+router.post("/request-game-data", ()=> {
+
+}); 
+
 router.get("*", (req, res) => {
     res.sendFile(_dirname + "/Frontend/dist/index.html");
 });

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Colors, ICastlingData, ICoordinates, IGameData, IGameResult, IPiece, ISquare, ITimer, MoveData, gameHistoryMove } from "../../../../types";
+import { Colors, ICastlingData, ICoordinates, IGameData, IGameResult, IPiece, ISquare, ITimer, MoveData, GameHistoryMove } from "../../../../types";
 import Moves from "../chessMovesLogic/Moves";
 import SpecialMoves from "../chessMovesLogic/SpecialMoves";
 import AdditionalFunctions from "../chessMovesLogic/AdditionalFunctions";
@@ -8,7 +8,7 @@ interface GameInitialState {
     currentPosition: ISquare[][],
     activePiece: null | IPiece,
     activePiecePosition: null | ICoordinates,
-    gameHistory: gameHistoryMove[],
+    gameHistory: GameHistoryMove[],
     moveColor: Colors,
     movePieceModelTo: ICoordinates | null,
     promotionMove: MoveData | null,
@@ -53,7 +53,7 @@ export const gameSlice = createSlice({
         },
 
         runPieceMoveAnimation(state, action: PayloadAction<MoveData>) {
-            const history: gameHistoryMove[] = state.gameHistory;
+            const history: GameHistoryMove[] = state.gameHistory;
             const currentPosition: ISquare[][] = [...state.currentPosition];
             const startSquare: ISquare = currentPosition[action.payload.startSquare.Y][action.payload.startSquare.X];
             const piece: IPiece = action.payload.piece;
@@ -61,7 +61,7 @@ export const gameSlice = createSlice({
             let killedPiece: IPiece | null = endSquare.piece ? { ...endSquare.piece } : null;
 
             if (piece.type === "pawn") {
-                const lastOpponentMove: gameHistoryMove | undefined = history[history.length - 1];
+                const lastOpponentMove: GameHistoryMove | undefined = history[history.length - 1];
                 const opponentPawnStartLineIndex: number = piece.color === "white" ? 6 : 1;
 
                 if (lastOpponentMove && lastOpponentMove.startSquare.Y === opponentPawnStartLineIndex) {
