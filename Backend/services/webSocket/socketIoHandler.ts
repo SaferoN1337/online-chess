@@ -1,10 +1,13 @@
 import { Socket } from "socket.io";
-import { ISquare, MoveData } from "../../../types";
+import { ISquare } from "../../../types";
 import Game from "../databaseRequests/Game/Game";
+import GameHistory from "../databaseRequests/GameHistory/GameHistory";
+import WebSocketFunctions from "./WebSocketFunctions/WebSocketFunctions";
+import { MoveHandlerParameters } from "./WebSocketFunctions/WebSocketFunctionsTypes";
 
 type SocketIoCallback = ({ result }: { result: boolean }) => void;
 
-export default function socketIoHandler(socket: Socket<any>) {
+export default function SocketIoHandler(socket: Socket<any>) {
     console.log('a user connected');
     socket.on('disconnect', () => {
         console.log('user disconnected');
@@ -21,21 +24,15 @@ export default function socketIoHandler(socket: Socket<any>) {
         console.log(`user left the room ${roomId}`);
     });
 
-    socket.on("movePiece", async ({ startSquare, endSquare, piece, roomId, timers }: MoveData) => {
-        const game = await Game.getGameDataById(roomId);
-        if(!game) return;
-
-        const newPosition: ISquare[][] = [...game.position]; 
-        newPosition[startSquare.Y][startSquare.X].piece = null;
-        newPosition[endSquare.Y][endSquare.X].piece = piece;
-        
-        const result = Game.updateGameDataAfterMove(roomId, newPosition, timers);
-        if(!result) return;
-
-        socket.to(`room ${roomId}`).emit("movePiece", { startSquare, endSquare, piece, roomId, timers });
+    socket.on("movePiece", async (parameters : MoveHandlerParameters, callback: SocketIoCallback) => {
+        // const result = await WebSocketFunctions.move(parameters);
+        // callback({ result: result });
+        socket.to(`room ${parameters.moveData.roomId}`).emit("movePiece", parameters);
     });
 
-    socket.on("castling", ({ startSquare, endSquare, piece, roomId, timers }: MoveData) => {
-        socket.to(`room ${roomId}`).emit("castling", { startSquare, endSquare, piece, roomId, timers });
+    socket.on("castling", async (parameters: MoveHandlerParameters, callback: SocketIoCallback) => {
+        // const result = await WebSocketFunctions.move(parameters);
+        // callback({ result: result });
+        socket.to(`room ${parameters.moveData.roomId}`).emit("castling", parameters);
     });
 }

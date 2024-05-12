@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 import { config } from "../../../mysqlConfig";
-import { CreateNewGame, DBGameData, DBGameHistoryMove, GetGameDataById, GetGameHistory, UpdateGameDataAfterMove, UpdateGameResult } from "./GameTypes";
+import { CreateNewGame, DBGameData, GetGameDataById, UpdateGameDataAfterMove, UpdateGameResult } from "./GameTypes";
 import { GameHistoryMove } from "../../../../types";
 
 class Game {
@@ -70,31 +70,6 @@ class Game {
         } catch (error) {
             console.log(error);
             return false;
-        } finally {
-            connection.end();
-        }
-    }
-
-    static getGameHistory: GetGameHistory = async (id)=> {
-        const connection = await mysql.createConnection(config);
-        try {
-            const [moves] = await connection.execute<DBGameHistoryMove[]>(`SELECT * FROM history WHERE gameId = '${id}'`);
-            const listOfMoves: GameHistoryMove[] = moves.map((move)=> {
-                return {
-                    id: move.id,
-                    type: move.type,
-                    color: move.color,
-                    startSquare: move.startSquare,
-                    endSquare: move.endSquare,
-                    killedPiece: move.killedPiece,
-                    check: move.check
-                }
-            });
-
-            return listOfMoves;
-        } catch (error) {
-            console.log(error);
-            return [];
         } finally {
             connection.end();
         }

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { runCastlingAnimation, runPieceMoveAnimation, showPiecePossibleMoves, showPromotionBlock } from "../../../redux/slices/gameSlice";
 import PieceMoveAnimation from "./PieceMoveAnimations/PieceMoveAnimation";
 import { socket } from "../../../skocketIo";
-import { MoveData } from "../../../../../types";
+import { GameHistoryMove, MoveData } from "../../../../../types";
 import Promotion from "./Promotion/Promotion";
 import CastlingAnimation from "./PieceMoveAnimations/CastlingAnimation";
 import { POSTApiRequest } from "../../../apiRequest";
@@ -20,7 +20,7 @@ export default function ChessBoard() {
     const promotionMove = useAppSelector(state => state.game.promotionMove);
     const castlingData = useAppSelector(state => state.game.castlingData);
     
-    console.log(currentPosition)
+    // console.log(currentPosition)
 
     useEffect(() => {
         if (activePiece && playerColor === activePiece.color && !movePieceModelTo) {
@@ -32,11 +32,11 @@ export default function ChessBoard() {
     }, [activePiece]);
 
     useEffect(() => {
-        function movePiece(moveData: MoveData) {
-            dispatch(runPieceMoveAnimation(moveData));
+        function movePiece({ moveData, gameHistoryMove}: { moveData: MoveData, gameHistoryMove : GameHistoryMove }) {
+            dispatch(runPieceMoveAnimation({ moveData, gameHistoryMove}));
         }
-        function castling(moveData: MoveData) {
-            dispatch(runCastlingAnimation(moveData));
+        function castling({ moveData, gameHistoryMove}: { moveData: MoveData, gameHistoryMove : GameHistoryMove }) {
+            dispatch(runCastlingAnimation({ moveData, gameHistoryMove}));
         }
         
         socket.on("castling", castling);

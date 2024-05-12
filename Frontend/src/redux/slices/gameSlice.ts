@@ -52,38 +52,19 @@ export const gameSlice = createSlice({
             }
         },
 
-        runPieceMoveAnimation(state, action: PayloadAction<MoveData>) {
-            const history: GameHistoryMove[] = state.gameHistory;
+        runPieceMoveAnimation(state, action: PayloadAction<{ moveData: MoveData, gameHistoryMove: GameHistoryMove }>) {
+            const moveData: MoveData = action.payload.moveData;
             const currentPosition: ISquare[][] = [...state.currentPosition];
-            const startSquare: ISquare = currentPosition[action.payload.startSquare.Y][action.payload.startSquare.X];
-            const piece: IPiece = action.payload.piece;
-            const endSquare: ISquare = currentPosition[action.payload.endSquare.Y][action.payload.endSquare.X];
-            let killedPiece: IPiece | null = endSquare.piece ? { ...endSquare.piece } : null;
-
-            if (piece.type === "pawn") {
-                const lastOpponentMove: GameHistoryMove | undefined = history[history.length - 1];
-                const opponentPawnStartLineIndex: number = piece.color === "white" ? 6 : 1;
-
-                if (lastOpponentMove && lastOpponentMove.startSquare.Y === opponentPawnStartLineIndex) {
-                    const isItClosestColumn: boolean = lastOpponentMove.startSquare.X === startSquare.X + 1 || lastOpponentMove.startSquare.X === startSquare.X - 1;
-                    const direction: number = piece.color === "white" ? 1 : -1;
-
-                    if (((piece.color === "white" && startSquare.Y === 4) || (piece.color === "black" && startSquare.Y === 3)) && isItClosestColumn) {
-                        if (lastOpponentMove.startSquare.X === endSquare.X, startSquare.Y + direction === endSquare.Y) {
-                            killedPiece = { type: lastOpponentMove.type, color: lastOpponentMove.color };
-                            currentPosition[lastOpponentMove.endSquare.Y][lastOpponentMove.endSquare.X].piece = null;
-                        }
-                    }
-                }
-            }
+            const startSquare: ISquare = currentPosition[moveData.startSquare.Y][moveData.startSquare.X];
+            const piece: IPiece = moveData.piece;
 
             startSquare.piece = null;
-            state.timers = action.payload.timers;
-            state.activePiece = action.payload.piece;
-            state.activePiecePosition = action.payload.startSquare;
+            state.timers = moveData.timers;
+            state.activePiece = moveData.piece;
+            state.activePiecePosition = moveData.startSquare;
             state.moveColor = piece.color === "white" ? "black" : "white";
-            state.gameHistory = AdditionalFunctions.updateGemeHistory(state.gameHistory, piece, startSquare, endSquare, currentPosition, killedPiece);
-            state.movePieceModelTo = { X: action.payload.endSquare.X, Y: action.payload.endSquare.Y };
+            state.gameHistory = [...state.gameHistory, action.payload.gameHistoryMove];
+            state.movePieceModelTo = { X: moveData.endSquare.X, Y: moveData.endSquare.Y };
             state.timers = { ...state.timers, timeOfThelastMove: Date.now() };
             state.currentPosition = currentPosition.map(line => line.map((square) => {
                 return { ...square, possibleMove: false }
@@ -107,10 +88,11 @@ export const gameSlice = createSlice({
             }
         },
 
-        runCastlingAnimation(state, action: PayloadAction<MoveData>) {
+        runCastlingAnimation(state, action: PayloadAction<{ moveData: MoveData, gameHistoryMove: GameHistoryMove }>) {
+            const moveData: MoveData = action.payload.moveData;
             const currentPosition = state.currentPosition.map(line => line.map(square => { return { ...square, possibleMove: false } }));
-            const startSquare = currentPosition[action.payload.startSquare.Y][action.payload.startSquare.X];
-            const endSquare = currentPosition[action.payload.endSquare.Y][action.payload.endSquare.X];
+            const startSquare = currentPosition[moveData.startSquare.Y][moveData.startSquare.X];
+            const endSquare = currentPosition[moveData.endSquare.Y][moveData.endSquare.X];
             let castle: IPiece = currentPosition[startSquare.Y][7].piece as IPiece;
             const king: IPiece = currentPosition[startSquare.Y][startSquare.X].piece as IPiece;
             if (endSquare.X === 2) {
@@ -132,9 +114,9 @@ export const gameSlice = createSlice({
                 }
             };
 
-            state.timers = action.payload.timers;
-            state.gameHistory = AdditionalFunctions.updateGemeHistory(state.gameHistory, king, startSquare, endSquare, currentPosition, null);
-            state.moveColor = action.payload.piece.color === "white" ? "black" : "white";
+            state.timers = moveData.timers;
+            state.gameHistory = [...state.gameHistory, action.payload.gameHistoryMove];
+            state.moveColor = moveData.piece.color === "white" ? "black" : "white";
             state.castlingData = castlingData;
             state.currentPosition = currentPosition;
         },

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IGameResult, ISquare, ITimer } from "../../../types";
+import { IGameResult, ISquare, ITimer, SearchParameters } from "../../../types";
 
 interface ReqGameData extends Request {
     body: {
@@ -7,4 +7,12 @@ interface ReqGameData extends Request {
     }
 } 
 
+interface ReqListOfGames extends Request {
+    body: {
+        parameters: SearchParameters
+    }
+} 
+
 export type RequestGameData = (req: ReqGameData, res: Response)=> void
+
+export type RequestListOfGames = (req: ReqListOfGames, res: Response)=> void

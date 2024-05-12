@@ -1,6 +1,6 @@
-import { Colors, ISquare, PieceTypes } from "../../../../types";
+import { Colors, IPiece, ISquare, PieceTypes } from "../../../../types";
 import Moves from "./Moves";
-import { UpdateHistory } from "./chessMovesLogicTypes";
+import { CreateGameHistoryLine, UpdateHistory } from "./chessMovesLogicTypes";
 
 class AdditionalFunctions {
     static renderDefaultPosition() {
@@ -44,29 +44,45 @@ class AdditionalFunctions {
         }));
     }
 
-    static updateGemeHistory: UpdateHistory = (history, activePiece, startSquare, endSquare, position, killedPiece) => {
-        const currenPosition: ISquare[][] = [...position].map(line => [...line].map(square => {
+    static createGameHistoryMove: CreateGameHistoryLine = (position, piece, startSquare, endSquare, lastMove)=> {
+        const currentPosition: ISquare[][] = [...position].map(line => [...line].map(square => {
             return { ...square, piece: square.piece ? { ...square.piece } : null };
         }));
-        currenPosition[endSquare.Y][endSquare.X].piece = activePiece;
-        const opponentColor: Colors = activePiece.color === "white" ? "black" : "white";
-    
-        Moves.markAllAttackedSquares(currenPosition, opponentColor);
-    
-        const kingsPosition: ISquare = currenPosition.flat(2).find(square => square.piece?.color === opponentColor && square.piece.type === "king") as ISquare;
+        let killedPiece: IPiece | null = currentPosition[endSquare.Y][endSquare.X].piece;
+
+        if (piece.type === "pawn" && lastMove) {
+            const opponentPawnStartLineIndex: number = piece.color === "white" ? 6 : 1;
+
+            if (lastMove && lastMove.startSquare.Y === opponentPawnStartLineIndex) {
+                const isItClosestColumn: boolean = lastMove.startSquare.X === startSquare.X + 1 || lastMove.startSquare.X === startSquare.X - 1;
+                const direction: number = piece.color === "white" ? 1 : -1;
+
+                if (((piece.color === "white" && startSquare.Y === 4) || (piece.color === "black" && startSquare.Y === 3)) && isItClosestColumn) {
+                    if (lastMove.startSquare.X === endSquare.X, startSquare.Y + direction === endSquare.Y) {
+                        killedPiece = { type: lastMove.type, color: lastMove.color };
+                        currentPosition[lastMove.endSquare.Y][lastMove.endSquare.X].piece = null;
+                    }
+                }
+            }
+        }
+
+        currentPosition[endSquare.Y][endSquare.X].piece = piece;
+        const opponentColor: Colors = piece.color === "white" ? "black" : "white";
+        Moves.markAllAttackedSquares(currentPosition, opponentColor);
+        const kingsPosition: ISquare = currentPosition.flat(2).find(square => square.piece?.color === opponentColor && square.piece.type === "king") as ISquare;
     
         const newMove = {
-            id: history.length,
-            color: activePiece.color,
-            type: activePiece.type,
+            id: lastMove ? lastMove.id + 1 : 0,
+            color: piece.color,
+            type: piece.type,
             startSquare: { X: startSquare.X, Y: startSquare.Y },
             endSquare: { X: endSquare.X, Y: endSquare.Y },
             killedPiece: killedPiece,
             check: kingsPosition.attacked
         }
-        return [...history, newMove];
+
+        return newMove;
     }
-    
 }
 
 export default AdditionalFunctions;

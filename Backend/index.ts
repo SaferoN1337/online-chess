@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import socketIoHandler from "./services/webSocket/socketIoHandler";
+import SocketIoHandler from "./services/webSocket/SocketIoHandler";
 import { router } from "./Router/Router";
 import Fingerprint from "express-fingerprint";
 import cookieParser from "cookie-parser";
@@ -19,12 +19,12 @@ app.use((req, res, next) => {
     next();
 });
 
-io.on('connection', socketIoHandler);
+io.on('connection', SocketIoHandler);
 app.use('/', express.static('Frontend/dist/'));
 app.use(express.urlencoded({ extended: false })); 
 app.use(express.json());
 app.use(Fingerprint());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(router);
 
 server.listen(port, () => { console.log(`Server is running on PORT ${port}...`) });

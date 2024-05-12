@@ -5,6 +5,7 @@ import { runCastlingAnimation, runPieceMoveAnimation, showPromotionBlock } from 
 import { socket } from "../../../../skocketIo";
 import Pieces from "../Pieces/Pieces";
 import { ISquare, MoveData } from "../../../../../../types";
+import AdditionalFunctions from "../../../../redux/chessMovesLogic/AdditionalFunctions";
 
 interface IProps {
     color: "white" | "black",
@@ -16,11 +17,14 @@ export default function Square({ color, square }: IProps) {
     const activePiece = useAppSelector(state => state.game.activePiece);
     const activePiecePosition = useAppSelector(state => state.game.activePiecePosition);
     const roomId = useLocation().pathname.replace("/game/", "");
-    const timers = useAppSelector(state=> state.game.timers);
-    const gameResult = useAppSelector(state=> state.game.gameResult);
+    const timers = useAppSelector(state => state.game.timers);
+    const gameResult = useAppSelector(state => state.game.gameResult);
+    const position = useAppSelector(state=> state.game.currentPosition);
+    const gameHistory = useAppSelector(state=> state.game.gameHistory);
 
     function move() {
-        if(gameResult) return;
+        if (gameResult) return;
+
         console.log(square.X, square.Y)
         if (activePiece && activePiecePosition && square.possibleMove) {
             const moveData: MoveData = {
@@ -30,7 +34,8 @@ export default function Square({ color, square }: IProps) {
                 roomId: +roomId,
                 timers: { ...timers, timeOfThelastMove: Date.now() }
             }
-
+            const lastMove = gameHistory[gameHistory.length - 1];
+            const gameHistoryMove = AdditionalFunctions.createGameHistoryMove(position, moveData.piece, moveData.startSquare,moveData.endSquare, lastMove);
             if (square.Y === 7 && activePiece.type === "pawn" && activePiece.color === "white") {
                 dispatch(showPromotionBlock(moveData));
             } else if (square.Y === 0 && activePiece.type === "pawn" && activePiece.color === "black") {
@@ -41,11 +46,15 @@ export default function Square({ color, square }: IProps) {
                 && (activePiecePosition.X === 4)
                 && (activePiecePosition.Y === 0 || activePiecePosition.Y === 7)
             ) {
-                dispatch(runCastlingAnimation(moveData));
-                socket.emit("castling", moveData);
+                dispatch(runCastlingAnimation({ moveData, gameHistoryMove }));
+                socket.emit("castling", { moveData, gameHistoryMove});
             } else {
-                dispatch(runPieceMoveAnimation(moveData));
-                socket.emit("movePiece", moveData);
+                dispatch(runPieceMoveAnimation({ moveData, gameHistoryMove}));
+                socket.emit("movePiece", { moveData, gameHistoryMove}, ({ result }: { result: boolean }) => {
+                    if(result === false) {
+
+                    }
+                });
             }
         }
     }
@@ -64,11 +73,13 @@ export default function Square({ color, square }: IProps) {
                 :
                 null
             }
-            {square.piece ? <Pieces
-                piece={square.piece}
-                X={square.X}
-                Y={square.Y}
-            /> : null}
+            {!square.piece ? null :
+                <Pieces
+                    piece={square.piece}
+                    X={square.X}
+                    Y={square.Y}
+                />
+            }
         </div>
     )
 }

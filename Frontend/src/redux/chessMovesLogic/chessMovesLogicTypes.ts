@@ -32,3 +32,11 @@ export type UpdateHistory = (
     position: ISquare[][],
     killedPiece: IPiece | null
 ) => GameHistoryMove[]
+
+export type CreateGameHistoryLine = (
+    position: ISquare[][],
+    piece: IPiece,
+    startSquare: ICoordinates,
+    endSquare: ICoordinates,
+    lastMoveId: GameHistoryMove | undefined
+)=> GameHistoryMove
