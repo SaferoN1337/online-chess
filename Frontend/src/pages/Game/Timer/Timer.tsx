@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import styles from "./Timer.module.css";
 import { updateGameResult, updateTimer } from "../../../redux/slices/gameSlice";
-import useTimer from "./useTimer";
+import useTimer from "../../../hooks/useTimer";
 
 export default function Timer() {
     const timers = useAppSelector(state => state.game.timers);

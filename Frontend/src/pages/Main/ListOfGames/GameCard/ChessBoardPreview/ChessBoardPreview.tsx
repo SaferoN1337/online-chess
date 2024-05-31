@@ -1,7 +1,7 @@
-
 import styles from "./ChessBoardPreview.module.css";
-import { ISquare } from "../../../../../../types";
+import { ISquare } from "../../../../../../../types";
 import PreviewSquare from "./PreviewSquare";
+import classNames from "classnames";
 
 interface IProps {
     position: ISquare[][];
@@ -10,7 +10,7 @@ interface IProps {
 export default function ChessBoardPreview({ position }: IProps) {
 
     return (
-        <div className={styles.chessBoard}>
+        <div className={classNames(styles.chessBoard)}>
             {position.map((line, rowIndex) =>
                 line.map((square, columnIndex) =>
                     <PreviewSquare

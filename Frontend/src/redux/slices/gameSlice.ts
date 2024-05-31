@@ -174,7 +174,8 @@ export const gameSlice = createSlice({
         updateGameData(state, action: PayloadAction<IGameData>) {
             state.currentPosition = action.payload.position;
             state.timers = action.payload.timers,
-            state.gameResult = action.payload.result
+            state.gameResult = action.payload.result,
+            state.moveColor = action.payload.moveColor
         }
     },
 })

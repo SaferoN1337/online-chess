@@ -1,0 +1,133 @@
+.burgerMenu {
+    display: none;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    position: absolute;
+    top: 17px;
+    left: 20px;
+    transition: 0.3s;
+    z-index: 3;
+}
+
+.burgerMenu .line {
+    width: 100%;
+    height: 3px;
+    background-color: white;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s ease;
+}
+
+.burgerMenu .line:nth-child(1) {
+    top: 0;
+}
+
+.burgerMenu .line:nth-child(2) {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.burgerMenu .line:nth-child(3) {
+    bottom: 0;
+}
+
+.burgerMenu.open .line:nth-child(1) {
+    transform: rotate(45deg);
+    top: 50%;
+}
+
+.burgerMenu.open .line:nth-child(2) {
+    opacity: 0;
+}
+
+.burgerMenu.open .line:nth-child(3) {
+    transform: rotate(-45deg);
+    top: 50%;
+}
+
+.navBlock {
+    position: relative;
+    box-sizing: border-box;
+    padding: 20px;
+    width: 270px;
+    height: 100vh;
+    background-color: #333;
+    position: fixed;
+    top: 0;
+    left: -300px;
+    transition: left 0.3s ease;
+    z-index: 2;
+}
+
+.logInButton {
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    width: 130px;
+    height: 30px;
+    margin-bottom: 20px;
+    transition: 0.2s;
+    background-color: #888;
+    color: white;
+}
+
+.logInButton:hover {
+    background-color: #666;
+}
+
+.navBlock .linkWrapper {
+    margin-bottom: 15px;
+}
+
+.contacts {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 18px;
+}
+
+.contacts span {
+    font-weight: bold;
+}
+
+.linkWrapper a {
+    font-size: 26px;
+    width: 150px;
+    color: white;
+}
+
+.linkWrapper a:hover {
+    border-bottom: solid white 1px;
+}
+
+@media (max-width: 768px) {
+    .burgerMenu {
+        display: block;
+    }
+
+    .navOpen {
+        left: 0;
+    }
+
+    .open {
+        position: fixed;
+        left: 220px;
+    }   
+
+    .nav a {
+        margin: 10px 0;
+        text-align: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .burgerMenu {
+        left: 10px;
+    }
+
+    .open {
+        left: 220px;
+    } 
+}

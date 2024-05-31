@@ -1,0 +1,84 @@
+/* Header.module.css */
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+}
+
+.contentWrapper {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    color: white;
+    position: relative;
+    height: 57px;
+}
+
+.logo h1 {
+    color: white;
+    margin: 0;
+}
+
+.nav {
+    width: 250px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav a {
+    color: white;
+}
+
+.nav a:hover {
+    border-bottom: 1px solid white;
+}
+
+.authButtons button {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.authButtons button:hover {
+    background-color: #777;
+}
+
+@media (max-width: 1230px) {
+    .contentWrapper {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contentWrapper {
+        justify-content: center;
+    }
+
+    .nav {
+        display: none;
+    }
+
+    .logo {
+        padding-left: 20px;
+    }
+
+    .authButtons {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .logo h1 {
+        font-size: 24px;
+    }
+}

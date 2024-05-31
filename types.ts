@@ -98,10 +98,11 @@ export interface IGameResult {
 export interface IGameData {
     id: number,
     position: ISquare[][],
-    player1: string,
-    player2: string,
+    player1: string | null,
+    player2: string | null,
     timers: ITimer,
     result: null | IGameResult
+    moveColor: Colors
 }
 
 export type Loading = "loading" | "fulfilled"

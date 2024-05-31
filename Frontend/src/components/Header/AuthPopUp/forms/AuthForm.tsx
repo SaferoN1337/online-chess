@@ -3,13 +3,13 @@ import styles from "../AuthPopUp.module.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import classNames from "classnames";
 
-import { POSTApiRequest } from "../../../apiRequest";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
-import { setAccessToken } from "../../../redux/slices/usersSlice";
+import { POSTApiRequest } from "../../../../apiRequest";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
+import { setAccessToken } from "../../../../redux/slices/usersSlice";
 
-import { IAccessTokenData, Session } from "../../../../../types";
+import { IAccessTokenData, Session } from "../../../../../../types";
 import { jwtDecode } from "jwt-decode";
-import { setAuthAlertData } from "../../../redux/slices/componentSlice";
+import { setAuthAlertData } from "../../../../redux/slices/componentSlice";
 
 interface IFormInputs {
     "login": string,

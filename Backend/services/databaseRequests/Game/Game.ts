@@ -1,7 +1,7 @@
 import mysql from "mysql2/promise";
 import { config } from "../../../mysqlConfig";
 import { CreateNewGame, DBGameData, GetGameDataById, UpdateGameDataAfterMove, UpdateGameResult } from "./GameTypes";
-import { GameHistoryMove } from "../../../../types";
+import { GameHistoryMove, IGameData, IGameResult, ISquare, ITimer } from "../../../../types";
 
 class Game {
     // static async getGamesUsingParameters() {
@@ -21,7 +21,7 @@ class Game {
         const connection = await mysql.createConnection(config);
         try {
             const [games] = await connection.execute<DBGameData[]>(`SELECT * FROM games WHERE id = '${id}'`);
-            return games[0];
+            return this.parseDBDBGameData(games[0]);
         } catch (error) {
             console.log(error);
             return undefined;
@@ -30,29 +30,26 @@ class Game {
         }
     }
 
-    static createNewGame: CreateNewGame = async (player1, player2, position) => {
+    static createNewGame: CreateNewGame = async (player1, player2, position, timers) => {
         const connection = await mysql.createConnection(config);
         try {
-            await connection.execute(`INSERT INTO games (player1, player2, position) 
-            VALUES ('${player1 ? player1 : null}', '${player2 ? player2 : null}', '${JSON.stringify(position)}')'`);
-            const [games] = await connection.execute<DBGameData[]>(`SELECT * FROM games 
-                WHERE player1 = '${player1 ? player1 : null}' 
-                AND player2 ='${player2 ? player2 : null}' 
-                AND position = '${JSON.stringify(position)}' 
-            ORDER BY id DESC`);
-            return games[0];
+            await connection.execute(`INSERT INTO games (player1, player2, position, timers) 
+            VALUES ('${player1 ? player1 : null}', '${player2 ? player2 : null}', '${JSON.stringify(position)}', '${timers}')'`);
+            const [games] = await connection.execute<DBGameData[]>(`SELECT * FROM games WHERE player1 = '${player1 ? player1 : null}' 
+                AND player2 ='${player2 ? player2 : null}' AND position = '${JSON.stringify(position)}' ORDER BY id DESC`);
+            return this.parseDBDBGameData(games[0]);
         } catch (error) {
             console.log(error);
-            return undefined;
+            return;
         } finally {
             connection.end();
         }
     }
 
-    static updateGameDataAfterMove: UpdateGameDataAfterMove = async (id, position, timers)=> {
+    static updateGameDataAfterMove: UpdateGameDataAfterMove = async (id, position, timers) => {
         const connection = await mysql.createConnection(config);
         try {
-            await connection.execute(`UPDATE games SET position = '${position}', timers='${timers}' WHERE id = '${id}'`)
+            await connection.execute(`UPDATE games SET position = '${JSON.stringify(position)}', timers='${JSON.stringify(timers)}' WHERE id = '${id}'`);
             return true;
         } catch (error) {
             console.log(error);
@@ -62,10 +59,10 @@ class Game {
         }
     }
 
-    static updateGameResult: UpdateGameResult= async (id, gameResult)=> {
+    static updateGameResult: UpdateGameResult = async (id, gameResult) => {
         const connection = await mysql.createConnection(config);
         try {
-            await connection.execute(`UPDATE games SET gameResult = '${gameResult}' WHERE id = '${id}'`);
+            await connection.execute(`UPDATE games SET gameResult = '${JSON.stringify(gameResult)}' WHERE id = '${id}'`);
             return true;
         } catch (error) {
             console.log(error);
@@ -73,6 +70,25 @@ class Game {
         } finally {
             connection.end();
         }
+    }
+
+    static parseDBDBGameData = (DBGameData: DBGameData | undefined) => {
+        if (!DBGameData) return;
+    
+        const parsedTimers: ITimer = JSON.parse(DBGameData.timers);
+        const parsedPosition: ISquare[][] = JSON.parse(DBGameData.position);
+        const parsedResult: null | IGameResult = DBGameData.result !== null ? JSON.parse(DBGameData.result) : null;
+    
+        const gameData: IGameData = {
+            id: DBGameData.id,
+            position: parsedPosition,
+            player1: DBGameData.player1,
+            player2: DBGameData.player2,
+            timers: parsedTimers,
+            result: parsedResult
+        }
+
+        return gameData;
     }
 }
 

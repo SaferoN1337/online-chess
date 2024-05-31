@@ -1,5 +1,5 @@
 import styles from "./ChessBoardPreview.module.css";
-import { ISquare } from "../../../../../../types";
+import { ISquare } from "../../../../../../../types";
 import classNames from "classnames";
 
 interface IProps {

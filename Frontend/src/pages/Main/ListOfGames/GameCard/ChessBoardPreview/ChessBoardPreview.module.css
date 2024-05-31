@@ -1,8 +1,8 @@
 .chessBoard {
     box-sizing: border-box;
     width: 100%;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -33,9 +33,9 @@
 }
 
 .black {
-    background-color: grey;
+    background-color: #b58863;
 }
 
 .white {
-    background-color: white;
+    background-color: #f0d9b5;
 }

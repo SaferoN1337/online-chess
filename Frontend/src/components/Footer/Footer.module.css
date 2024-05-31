@@ -1,0 +1,74 @@
+.footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: left;
+}
+
+.footerContent {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footerContent > div {
+    box-sizing: border-box;
+    min-width: 150px;
+    margin: 15px;
+    flex: 1;
+}
+
+.footerContent h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.footerContent p,
+.footerContent a {
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+}
+
+.footerContent a:hover {
+    text-decoration: underline;
+}
+
+.copy {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.socialNetworks {
+    max-width: 200px;
+    flex-direction: row-reverse;
+    margin-top: 10px;
+}
+
+.linksWrapper {
+    display: flex;
+}
+
+.linksWrapper div {
+    width: 40px;
+    height: 40px;
+}
+
+.tgIcon {
+    background: url(icons/tg-icon.png) center no-repeat;
+    background-size: cover;
+}
+
+.vkIcon {
+    margin: 0 20px;
+    background: url(icons/vk-icon.png) center no-repeat;
+    background-size: cover;
+}
+
+.okIcon {
+    background: url(icons/ok-icon.png) center no-repeat;
+    background-size: cover;
+}

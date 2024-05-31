@@ -10,13 +10,13 @@
 }
 
 .invisibleCard {
-    width: 200px;
+    width: 250px;
     margin: 20px;
 }
 
 .gamePreviewWrapper {
     margin: 20px;
-    width: 200px;
+    width: 250px;
     text-align: center;
     box-shadow: gray 3px 3px 10px;
     transition: 0.3s;
@@ -30,4 +30,15 @@
 .gamePreviewWrapper:hover {
     scale: 1.05;
     box-shadow: rgb(0, 0, 0) 6px 6px 12px;
+}
+
+.playersInfo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+
+.playersInfo p {
+    margin: 0;
 }

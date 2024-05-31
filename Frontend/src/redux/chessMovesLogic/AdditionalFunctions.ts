@@ -1,6 +1,6 @@
 import { Colors, IPiece, ISquare, PieceTypes } from "../../../../types";
 import Moves from "./Moves";
-import { CreateGameHistoryLine, UpdateHistory } from "./chessMovesLogicTypes";
+import { CreateGameHistoryLine } from "./chessMovesLogicTypes";
 
 class AdditionalFunctions {
     static renderDefaultPosition() {

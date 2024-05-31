@@ -13,3 +13,4 @@ export const config: IConfig = {
     user: 'root',
     database: 'chess'
 }
+

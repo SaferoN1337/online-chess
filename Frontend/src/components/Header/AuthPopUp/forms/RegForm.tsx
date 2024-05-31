@@ -3,12 +3,12 @@ import classNames from "classnames";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { jwtDecode } from "jwt-decode";
 
-import { useAppDispatch } from "../../../redux/hooks/hooks";
-import { setAccessToken } from "../../../redux/slices/usersSlice";
-import { setAuthAlertData } from "../../../redux/slices/componentSlice";
+import { useAppDispatch } from "../../../../redux/hooks/hooks";
+import { setAccessToken } from "../../../../redux/slices/usersSlice";
+import { setAuthAlertData } from "../../../../redux/slices/componentSlice";
 
-import { POSTApiRequest } from "../../../apiRequest";
-import { IAccessTokenData, Session } from "../../../../../types";
+import { POSTApiRequest } from "../../../../apiRequest";
+import { IAccessTokenData, Session } from "../../../../../../types";
 
 interface IFormInputs {
     "login": string,

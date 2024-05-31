@@ -1,13 +1,13 @@
 import styles from "./AuthPopUp.module.css";
 import { useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "../../redux/hooks/hooks";
-import { showOrHideAuthPopUp, switchFormToReg } from "../../redux/slices/componentSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { showOrHideAuthPopUp, switchFormToReg } from "../../../redux/slices/componentSlice";
 
-import Overlay from "../Overlay/Overlay";
+import Overlay from "../../Overlay/Overlay";
 import AuthForm from "./forms/AuthForm";
 import RegForm from "./forms/RegForm";
-import Alert from "../Alert/Alert";
+import Alert from "../../Alert/Alert";
 
 export default function AuthPopUp() {
     const dispatch = useAppDispatch();

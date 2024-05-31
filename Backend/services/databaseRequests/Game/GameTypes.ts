@@ -1,15 +1,23 @@
 import { RowDataPacket } from "mysql2"
 import { ISquare, IGameResult, IGameData, ITimer, GameHistoryMove } from "../../../../types";
 
-export interface DBGameData extends RowDataPacket, IGameData {}
+export interface DBGameData extends RowDataPacket {
+    id: number,
+    position: string,
+    player1: string,
+    player2: string,
+    timers: string,
+    result: null | string
+}
 
-export type GetGameDataById = (id: number) => Promise<DBGameData | undefined>
+export type GetGameDataById = (id: number) => Promise<IGameData | undefined>
 
 export type CreateNewGame = (
     player1: undefined | string, 
     player2: undefined | string,
-    position: ISquare[][]
-) => Promise<DBGameData | undefined>
+    position: ISquare[][],
+    timers: ITimer
+) => Promise<IGameData | undefined>
 
 export type UpdateGameDataAfterMove = (
     id: number, 
@@ -18,3 +26,4 @@ export type UpdateGameDataAfterMove = (
 )=> Promise<boolean> 
 
 export type UpdateGameResult = (id: number, gameResult: IGameResult)=> Promise<boolean>; 
+

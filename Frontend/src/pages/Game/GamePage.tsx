@@ -16,10 +16,10 @@ import { POSTApiRequest } from "../../apiRequest";
 export default function GamePage() {
     const dispatch = useAppDispatch();
     const location = useLocation();
-    const listOfGames = useAppSelector(state=> state.components.listOfGames);
+    const listOfGames = useAppSelector(state => state.components.listOfGames);
     const roomId = location.pathname.replace("/game/", "");
-    const currentGameData = listOfGames.find(game=> game.id === +roomId);
-    const [loading, setLoading] = useState<Loading>("loading");
+    const currentGameData = listOfGames.find(game => game.id === +roomId);
+    const [_, setLoading] = useState<Loading>("loading");
 
     console.log(listOfGames)
     useEffect(() => {
@@ -27,13 +27,13 @@ export default function GamePage() {
             console.log(`user connected to the room ${roomId} with result ${response.result}`);
         });
 
-        return ()=> {
-            socket.emit("userLeftTheRoom",  { roomId: roomId });
+        return () => {
+            socket.emit("userLeftTheRoom", { roomId: roomId });
         }
     }, []);
 
-    useEffect(()=> {
-        if(currentGameData) {
+    useEffect(() => {
+        if (currentGameData) {
             dispatch(updateGameData(currentGameData));
         }
 
@@ -43,7 +43,7 @@ export default function GamePage() {
     async function requestGameData() {
         setLoading("loading");
         const response = await POSTApiRequest<{ id: number }, { gameData: IGameData, gameHistory: GameHistoryMove[] }>("/request-game-data", { id: +roomId });
-        if(response.result === "success") {
+        if (response.result === "success") {
             dispatch(updateGameData(response.data.gameData));
         }
         setLoading("fulfilled");

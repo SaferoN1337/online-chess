@@ -1,11 +1,14 @@
 import { MoveData } from "../../../../../../types";
-import { useAppDispatch } from "../../../../redux/hooks/hooks";
+import AdditionalFunctions from "../../../../redux/chessMovesLogic/AdditionalFunctions";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks/hooks";
 import { runPieceMoveAnimation } from "../../../../redux/slices/gameSlice";
 import { socket } from "../../../../skocketIo";
 import styles from "./Promotion.module.css";
 
 export default function Promotion({ moveData }: { moveData: MoveData }) {
     const dispatch = useAppDispatch();
+    const position = useAppSelector(state=> state.game.currentPosition);
+    const gameHistory = useAppSelector(state=> state.game.gameHistory);
     const top = `${moveData.piece.color === "black" ? 87.5 : 0}%`;
     let left = "0";
     if (moveData.startSquare.X >= 4) {
@@ -13,9 +16,12 @@ export default function Promotion({ moveData }: { moveData: MoveData }) {
     } 
 
     function onClick(type: "queen" | "castle" | "bishop" | "knight") {
+        const lastMove = gameHistory[gameHistory.length - 1];
         const newMoveData: MoveData = { ...moveData, piece: { color: moveData.piece.color, type: type } };
-        dispatch(runPieceMoveAnimation(newMoveData));
-        socket.emit("movePiece", newMoveData);
+        const gameHistoryMove = AdditionalFunctions.createGameHistoryMove(position, moveData.piece, moveData.startSquare,moveData.endSquare, lastMove);
+
+        dispatch(runPieceMoveAnimation({ moveData: newMoveData, gameHistoryMove }));
+        socket.emit("movePiece", { moveData: newMoveData, gameHistoryMove});
     }
 
     return (

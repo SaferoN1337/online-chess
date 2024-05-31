@@ -1,18 +1,29 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
-import Game from './pages/Game/GamePage.tsx';
-import MainPage from './pages/Main/MainPage.tsx';
-import AuthPopUp from './components/AuthPopUp/AuthPopUp.tsx';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { useEffect } from 'react';
 import { POSTApiRequest } from './apiRequest.ts';
 import { useAppDispatch, useAppSelector } from './redux/hooks/hooks.ts';
 import { setAccessToken } from './redux/slices/usersSlice.ts';
 import { IAccessTokenData } from '../../types.ts';
+import Header from './components/Header/Header.tsx';
+import Game from './pages/Game/GamePage.tsx';
+import MainPage from './pages/Main/MainPage.tsx';
+import Footer from './components/Footer/Footer.tsx';
 
-const router = createBrowserRouter([
-    { path: "/game/*", element: <Game /> },
-    { path: "/", element: <MainPage /> }
-]);
+const router = createBrowserRouter([{
+    element: (
+        <>
+            <Header />
+            <main id="main">
+                <Outlet />
+            </main>
+            <Footer />
+        </>
+    ),
+    children: [
+        { path: "/game/*", element: <Game /> },
+        { path: "/", element: <MainPage /> }
+    ]
+}]);
 
 export default function App() {
     const dispatch = useAppDispatch();
@@ -30,13 +41,13 @@ export default function App() {
             console.log(response.message);
         }
     }
-    
+
     useEffect(() => {
         if (timeLeft <= 0) return;
         const abortController = new AbortController();
 
-        const accessTokenExpirationTimeout = setTimeout(()=> { 
-            refreshTokens(abortController.signal); 
+        const accessTokenExpirationTimeout = setTimeout(() => {
+            refreshTokens(abortController.signal);
         }, timeLeft - 10000);
 
         return () => {
@@ -45,21 +56,13 @@ export default function App() {
         }
     }, [accessToken, timeLeft]);
 
-    useEffect(()=> {
+    useEffect(() => {
         const abortController = new AbortController();
         refreshTokens(abortController.signal);
-        return ()=> {
+        return () => {
             abortController.abort();
         }
     }, []);
 
-    return (
-        <>
-            <main id='main'>
-                <AuthPopUp />
-                <RouterProvider router={router} />
-            </main>
-            <div>footer</div>
-        </>
-    )
+    return (<RouterProvider router={router} />)
 }

@@ -5,6 +5,8 @@ body {
     padding: 0;
     box-shadow: none;
     border: none;
+    background: url("background2.jpg") no-repeat center;
+    background-size: cover;
 }
 
 #root {
@@ -15,4 +17,14 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    background-color: white;
+}
+
+a {
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
+
+a.active {
+    border-bottom: 1px solid white;
 }

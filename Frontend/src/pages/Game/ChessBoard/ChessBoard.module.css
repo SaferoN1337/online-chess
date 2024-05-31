@@ -29,15 +29,15 @@
     max-width: 35%;
     max-height: 35%;
     border-radius: 50%;
-    background-color: greenyellow;
+    background-color: rgb(136, 204, 35);
 }
 
 .black {
-    background-color: grey;
+    background-color: #b58863;
 }
 
 .white {
-    background-color: white;
+    background-color: #f0d9b5;
 }
 
 .rotate {

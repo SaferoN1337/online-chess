@@ -19,10 +19,10 @@ class GameApi {
         }
     }
 
-    static requestListOfGames: RequestListOfGames = async (req, res)=> {
-        const parameters = req.body.parameters;
+    // static requestListOfGames: RequestListOfGames = async (req, res)=> {
+    //     const parameters = req.body.parameters;
 
-    }
+    // }
 }
 
 export default GameApi;

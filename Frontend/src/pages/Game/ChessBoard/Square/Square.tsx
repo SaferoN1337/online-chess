@@ -35,7 +35,7 @@ export default function Square({ color, square }: IProps) {
                 timers: { ...timers, timeOfThelastMove: Date.now() }
             }
             const lastMove = gameHistory[gameHistory.length - 1];
-            const gameHistoryMove = AdditionalFunctions.createGameHistoryMove(position, moveData.piece, moveData.startSquare,moveData.endSquare, lastMove);
+            const gameHistoryMove = AdditionalFunctions.createGameHistoryMove(position, moveData.piece, moveData.startSquare, moveData.endSquare, lastMove);
             if (square.Y === 7 && activePiece.type === "pawn" && activePiece.color === "white") {
                 dispatch(showPromotionBlock(moveData));
             } else if (square.Y === 0 && activePiece.type === "pawn" && activePiece.color === "black") {
