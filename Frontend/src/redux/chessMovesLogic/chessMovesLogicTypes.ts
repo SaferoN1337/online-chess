@@ -40,3 +40,9 @@ export type CreateGameHistoryLine = (
     endSquare: ICoordinates,
     lastMoveId: GameHistoryMove | undefined
 )=> GameHistoryMove
+
+export type RemoveOpponentPawnIfEnPassant= (
+    position: ISquare[][],
+    gameMoveData: GameHistoryMove,
+    history: GameHistoryMove[]
+)=> ISquare[][]

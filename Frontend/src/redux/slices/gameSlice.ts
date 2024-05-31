@@ -54,7 +54,8 @@ export const gameSlice = createSlice({
 
         runPieceMoveAnimation(state, action: PayloadAction<{ moveData: MoveData, gameHistoryMove: GameHistoryMove }>) {
             const moveData: MoveData = action.payload.moveData;
-            const currentPosition: ISquare[][] = [...state.currentPosition];
+            const history = state.gameHistory;
+            const currentPosition: ISquare[][] = SpecialMoves.removeOpponentPawnIfEnPassant([...state.currentPosition], action.payload.gameHistoryMove, history);
             const startSquare: ISquare = currentPosition[moveData.startSquare.Y][moveData.startSquare.X];
             const piece: IPiece = moveData.piece;
 
