@@ -1,22 +1,17 @@
 .listOfGamesWrapper {
     width: 100%;
-    min-height: 100svh;
 }
 
 .listOfGames {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.invisibleCard {
-    width: 250px;
-    margin: 20px;
+    padding: 30px;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
 }
 
 .gamePreviewWrapper {
-    margin: 20px;
-    width: 250px;
+    width: 100%;
     text-align: center;
     box-shadow: gray 3px 3px 10px;
     transition: 0.3s;
@@ -41,4 +36,31 @@
 
 .playersInfo p {
     margin: 0;
+}
+
+@media screen AND (max-width: 900px) {
+    .listOfGames {
+        padding: 20px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+@media screen AND (max-width: 650px) {
+    .listOfGames {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen AND (max-width: 500px) {
+    .listOfGames {
+        padding: 20px 50px;
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen AND (max-width: 400px) {
+    .listOfGames {
+        padding: 20px;
+    }
 }

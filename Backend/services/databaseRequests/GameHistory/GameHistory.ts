@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 import { config } from "../../../mysqlConfig";
-import { GameHistoryMove } from "../../../../types";
+import { GameHistoryMove, ICoordinates } from "../../../../types";
 import { DBGameHistoryMove, GetGameHistory, UpdateGameHistory } from "./GameHistoryTypes";
 
 class GameHistory {
@@ -13,8 +13,8 @@ class GameHistory {
                     id: move.id,
                     type: move.type,
                     color: move.color,
-                    startSquare: move.startSquare,
-                    endSquare: move.endSquare,
+                    startSquare: JSON.parse(move.startSquare) as ICoordinates,
+                    endSquare: JSON.parse(move.endSquare) as ICoordinates,
                     killedPiece: move.killedPiece,
                     check: move.check
                 }

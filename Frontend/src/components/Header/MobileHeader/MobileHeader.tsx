@@ -45,7 +45,7 @@ export default function MobileHeader({ session }: IProps) {
 
                 <div className={styles.contacts}>
                     <p><span>Email:</span> info@chessonline.com</p>
-                    <p><span>Телефон:</span> +123 456 7890</p>
+                    <p><span>Телефон:</span> +123 456 78-90</p>
                 </div>
             </nav>
         </>

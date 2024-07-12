@@ -1,0 +1,40 @@
+.checkboxWrapper {
+  margin-bottom: 20px;
+}
+
+.checkboxWrapper input {
+  display: none;
+}
+
+.customCheckbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: solid white 1px;
+}
+
+.checked {
+  background: url(/icons/check-mark.png) green center no-repeat;
+  background-size: 80%;
+}
+
+.notChecked {
+  background-color: white;
+}
+
+.checkboxLabel {
+  cursor: pointer;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+}
+
+.checkboxLabel p {
+  margin: 0 0 0 10px;
+  color: rgb(224, 224, 224);
+  font-size: 18px;
+}
+
+.error {
+  color: red;
+}

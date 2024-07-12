@@ -28,11 +28,13 @@ export default function Header() {
                         <h1>Шахматы Онлайн</h1>
                     </Link>
                 </div>
-                <nav className={styles.nav}>
-                    <NavLink to="/">Главная</NavLink>
-                    <NavLink to="/tournaments">Турниры</NavLink>
-                    <NavLink to="/contacts">Контакты</NavLink>
-                </nav>
+                <div className={styles.navWrapper}>
+                    <nav className={styles.nav}>
+                        <NavLink to="/">Главная</NavLink>
+                        <NavLink to="/tournaments">Турниры</NavLink>
+                        <NavLink to="/contacts">Контакты</NavLink>
+                    </nav>
+                </div>
                 <div className={styles.authButtons}>
                     {session ? (
                         <button onClick={handleClickLogout}>Профиль</button>

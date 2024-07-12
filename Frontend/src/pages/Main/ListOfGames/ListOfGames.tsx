@@ -13,31 +13,7 @@ import GameCard from "./GameCard/GameCard";
 export default function ListOfGames() {
     const dispatch = useAppDispatch();
     const listOfGames = useAppSelector(state => state.components.listOfGames);
-    const [windowSize, setWindowSize] = useState<number>(window.innerWidth);
     const [loading, setLoading] = useState<Loading>("loading");
-
-    let cardsInLine = 1;
-    if (windowSize > 1176) {
-        cardsInLine = 4;
-    } else if (windowSize > 886 && windowSize <= 1176) {
-        cardsInLine = 3;
-    } else if (windowSize > 596 && windowSize <= 886) {
-        cardsInLine = 2;
-    } 
-
-    const needCards = cardsInLine - listOfGames.length % cardsInLine;
-    const invisibleCard: number[] = new Array(needCards).fill(0).map((_, index) => index);
-
-    useEffect(() => {
-        function onResize() {
-            setWindowSize(window.innerWidth);
-        }
-        window.addEventListener("resize", onResize);
-
-        return () => {
-            window.removeEventListener("resize", onResize);
-        }
-    }, []);
 
     useEffect(() => {
         // requestListOfGames();
@@ -91,7 +67,6 @@ export default function ListOfGames() {
             {loading === "loading" && listOfGames.length === 0 ? <Spinner /> :
                 <div className={styles.listOfGames}>
                     {listOfGames.map((game) => <GameCard game={game} key={game.id} />)}
-                    {invisibleCard.map((elem) => <div className={styles.invisibleCard} key={elem} />)}
                 </div>
             }
         </div>

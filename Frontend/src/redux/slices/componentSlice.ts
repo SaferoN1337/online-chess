@@ -6,7 +6,8 @@ interface initialStates {
     showAuthPopUp: boolean,
     authAlertData: null | IAlertData,
     showGameResult: boolean,
-    listOfGames: IGameData[]
+    listOfGames: IGameData[],
+    showCreateNewGame: boolean
 }
 
 const initialState: initialStates = {
@@ -14,7 +15,8 @@ const initialState: initialStates = {
     showAuthPopUp: false,
     authAlertData: null,
     showGameResult: false,
-    listOfGames: []
+    listOfGames: [],
+    showCreateNewGame: true
 }
 
 export const componentsSlice = createSlice({
@@ -39,6 +41,10 @@ export const componentsSlice = createSlice({
 
         setListOfGames(state, action: PayloadAction<IGameData[]>) {
             state.listOfGames = action.payload;
+        },
+
+        setShowCreateNewGame(state, action: PayloadAction<boolean>) {
+            state.showCreateNewGame = action.payload;
         }
     }
 })
@@ -48,6 +54,7 @@ export const {
     switchFormToReg,
     setAuthAlertData,
     setShowGameResult,
-    setListOfGames
+    setListOfGames,
+    setShowCreateNewGame
 } = componentsSlice.actions;
 export default componentsSlice.reducer;

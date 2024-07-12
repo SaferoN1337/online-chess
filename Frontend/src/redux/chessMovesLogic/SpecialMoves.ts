@@ -119,10 +119,10 @@ class SpecialMoves {
         const lastEnemyMove = gameHistory[gameHistory.length - 1];
         const isItClosestColumn = lastEnemyMove.endSquare.X + 1 === gameHistoryMove.startSquare.X || lastEnemyMove.endSquare.X - 1 === gameHistoryMove.startSquare.X;
         const correctStartPosition = (lastEnemyMove.startSquare.Y === 6 && lastEnemyMove.color === "black") || (lastEnemyMove.startSquare.Y === 1 && lastEnemyMove.color === "white");
-        const correctEndPosition = gameHistoryMove.endSquare.X === lastEnemyMove.endSquare.X && gameHistoryMove.startSquare.Y === lastEnemyMove.endSquare.Y && isItClosestColumn; 
+        const correctEndPosition = gameHistoryMove.endSquare.X === lastEnemyMove.endSquare.X && gameHistoryMove.startSquare.Y === lastEnemyMove.endSquare.Y; 
         const bothPiecesTypeArePawn =  gameHistoryMove.type === "pawn" && lastEnemyMove.type === "pawn";
 
-        if (correctStartPosition && bothPiecesTypeArePawn && correctEndPosition ) {
+        if (correctStartPosition && bothPiecesTypeArePawn && correctEndPosition && isItClosestColumn) {
             position[lastEnemyMove.endSquare.Y][lastEnemyMove.endSquare.X].piece = null;
         }
 

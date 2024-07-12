@@ -1,0 +1,141 @@
+.createGameForm {
+  width: 300px;
+  padding: 30px 40px;
+  height: 500px;
+  background-color: rgb(38, 36, 33);
+  border-radius: 10px;
+}
+
+.title {
+  color: rgb(255, 255, 255);
+  font-size: 34px;
+  padding-left: 5px;
+}
+
+.createGameForm h3 {
+  color: white;
+  font-size: 24px;
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.inputWrapper label {
+  color: rgb(224, 224, 224);
+  font-size: 16px;
+  padding-left: 5px;
+}
+
+.inputWrapper input, select {
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 35px;
+  margin: 5px 0;
+  width: 100%;
+  height: 35px;
+  outline: 0;
+  background-color: rgb(63, 61, 58);
+  border-radius: 6px;
+  box-shadow: none;
+  border: none;
+  font-size: 16px;
+  color: rgb(224, 224, 224);
+  transition: 0.2s;
+  box-sizing: border-box;
+  transition: 0.2s;
+}
+
+.inputWrapper input {
+  cursor: auto;
+}
+
+select:hover, input:hover {
+  background-color: rgb(87, 86, 86);
+}
+
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type='number'], input[type="number"]:hover, input[type="number"]:focus {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+input:focus {
+  background-color: rgb(87, 86, 86);
+}
+
+input::placeholder {
+  color: gray;
+}
+
+.error {
+  padding-left: 5px;
+  color: red;
+}
+
+.timeLabeles {
+  display: flex;
+  width: 190px;
+  justify-content: space-between;
+  padding-left: 2px;
+  padding-bottom: 3px;
+}
+
+.timeLabeles span {
+  font-size: 14px;
+  width: 54px;
+  text-align: center;
+  color: rgb(224, 224, 224);
+}
+
+.timeInputGroup {
+  display: flex;
+  align-items: center;
+}
+
+.timeInput {
+  color: white;
+  width: 40px;
+  font-size: 18px;
+  text-align: center;
+  margin: 0 2px;
+  padding: 5px;
+  outline: 0;
+  background-color: rgb(63, 61, 58);
+  transition: 0.2s;
+}
+
+.timeSeparator {
+  display: inline-block;
+  margin: 0 2px;
+  font-size: 1.2em;
+  color: white;
+}
+
+.submitButton {
+  margin-top: 20px;
+  cursor: pointer;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  background-color: rgb(108, 151, 38);
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border: none;
+  outline: none;
+  transition: 0.2s;
+  border-bottom: solid 3px rgb(2, 100, 2);
+  border-radius: 8px;
+}
+
+.submitButton:hover {
+  filter: brightness(1.2);
+}
+
+

@@ -1,7 +1,7 @@
 import mysql from "mysql2/promise";
 import { config } from "../../../mysqlConfig";
 import { CreateNewGame, DBGameData, GetGameDataById, UpdateGameDataAfterMove, UpdateGameResult } from "./GameTypes";
-import { GameHistoryMove, IGameData, IGameResult, ISquare, ITimer } from "../../../../types";
+import { IGameData, IGameResult, ISquare, ITimer } from "../../../../types";
 
 class Game {
     // static async getGamesUsingParameters() {
@@ -21,7 +21,7 @@ class Game {
         const connection = await mysql.createConnection(config);
         try {
             const [games] = await connection.execute<DBGameData[]>(`SELECT * FROM games WHERE id = '${id}'`);
-            return this.parseDBDBGameData(games[0]);
+            return this.parseDBGameData(games[0]);
         } catch (error) {
             console.log(error);
             return undefined;
@@ -37,7 +37,7 @@ class Game {
             VALUES ('${player1 ? player1 : null}', '${player2 ? player2 : null}', '${JSON.stringify(position)}', '${timers}')'`);
             const [games] = await connection.execute<DBGameData[]>(`SELECT * FROM games WHERE player1 = '${player1 ? player1 : null}' 
                 AND player2 ='${player2 ? player2 : null}' AND position = '${JSON.stringify(position)}' ORDER BY id DESC`);
-            return this.parseDBDBGameData(games[0]);
+            return this.parseDBGameData(games[0]);
         } catch (error) {
             console.log(error);
             return;
@@ -72,7 +72,7 @@ class Game {
         }
     }
 
-    static parseDBDBGameData = (DBGameData: DBGameData | undefined) => {
+    static parseDBGameData = (DBGameData: DBGameData | undefined) => {
         if (!DBGameData) return;
     
         const parsedTimers: ITimer = JSON.parse(DBGameData.timers);
@@ -85,7 +85,8 @@ class Game {
             player1: DBGameData.player1,
             player2: DBGameData.player2,
             timers: parsedTimers,
-            result: parsedResult
+            result: parsedResult,
+            moveColor: DBGameData.moveColor
         }
 
         return gameData;

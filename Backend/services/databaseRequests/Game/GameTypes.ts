@@ -1,5 +1,5 @@
 import { RowDataPacket } from "mysql2"
-import { ISquare, IGameResult, IGameData, ITimer, GameHistoryMove } from "../../../../types";
+import { ISquare, IGameResult, IGameData, ITimer, Colors } from "../../../../types";
 
 export interface DBGameData extends RowDataPacket {
     id: number,
@@ -7,7 +7,8 @@ export interface DBGameData extends RowDataPacket {
     player1: string,
     player2: string,
     timers: string,
-    result: null | string
+    result: null | string,
+    moveColor: Colors
 }
 
 export type GetGameDataById = (id: number) => Promise<IGameData | undefined>

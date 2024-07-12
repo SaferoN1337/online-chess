@@ -77,6 +77,10 @@
     background-color: #666;
 }
 
+.profile {
+    font-size: 24px;
+}
+
 .navBlock .linkWrapper {
     margin-bottom: 15px;
 }
@@ -102,7 +106,7 @@
     border-bottom: solid white 1px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .burgerMenu {
         display: block;
     }
